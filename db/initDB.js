@@ -1,29 +1,27 @@
-'use strict';
+"use strict";
 
 require("dotenv").config();
-const {format} = require("date-fns");
+const { format } = require("date-fns");
 const { func } = require("joi");
 const connectDB = require("./db");
 
 let connection;
 
+async function main() {
+  try {
+    connection = await connectDB();
 
+    // BORRAR TABLAS
+    console.log("Borrando tablas....");
 
-async function main(){
-	try {
-		connection = await connectDB();
+    await connection.query("DROP TABLE IF EXISTS answer_votes;");
+    await connection.query("DROP TABLE IF EXISTS answers;");
+    await connection.query("DROP TABLE IF EXISTS questions;");
+    await connection.query("DROP TABLE IF EXISTS users;");
 
-		// BORRAR TABLAS
-		console.log('Borrando tablas....');
-		
-		await connection.query('DROP TABLE IF EXISTS answer_votes;');
-		await connection.query('DROP TABLE IF EXISTS answers;');
-		await connection.query('DROP TABLE IF EXISTS questions;');
-		await connection.query('DROP TABLE IF EXISTS users;');
+    //CREAR TABLAS
 
-		//CREAR TABLAS
-
-		await connection.query(`
+    await connection.query(`
 		CREATE TABLE users
 		(
 			ID INTEGER PRIMARY KEY AUTO_INCREMENT, 
@@ -33,6 +31,7 @@ async function main(){
 			Password VARCHAR(512) NOT NULL,
 			UserRole ENUM("Student", "Expert") DEFAULT "Student" NOT NULL,
 			Activation BOOLEAN DEFAULT false,
+			RegistrationCode VARCHAR(50),
 			Technology ENUM("HTML", "CSS", "JavaScript", "SQL", "Node", "React") DEFAULT null,
 			Deleted BOOLEAN DEFAULT false,
 			LastAuthUpdate DATETIME,
@@ -40,9 +39,9 @@ async function main(){
 		);
 		`);
 
-		console.log("Finalizado users");
-		
-		await connection.query(`
+    console.log("Finalizado users");
+
+    await connection.query(`
 		CREATE TABLE questions 
 		(
 			ID INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -54,10 +53,10 @@ async function main(){
 			FOREIGN KEY (User_id) REFERENCES users(ID)
 			);
 			`);
-		
-		console.log("Finalizado questions");
-			
-		await connection.query(`
+
+    console.log("Finalizado questions");
+
+    await connection.query(`
 			CREATE TABLE answers
 			(
 				ID INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
@@ -70,9 +69,9 @@ async function main(){
 			);		
 		`);
 
-		console.log("Finalizado anwsers");
+    console.log("Finalizado anwsers");
 
-		await connection.query(`
+    await connection.query(`
 			CREATE TABLE answer_votes (
 				ID INT PRIMARY KEY AUTO_INCREMENT,
 				Date DATETIME NOT NULL,
@@ -85,12 +84,13 @@ async function main(){
 			);		
 		`);
 
-		console.log("Finalizado answer_votes");
+    console.log("Finalizado answer_votes");
 
-		//CREAR UN USUARIO DE CADA
-		const creationDate = format(new Date(), 'yyyy-MM-dd HH:mm:ss');
+    //CREAR UN USUARIO DE CADA
+    const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
-		await connection.query(`
+    await connection.query(
+      `
 				INSERT INTO users (
 					CreationDate,
 					Username,
@@ -99,13 +99,23 @@ async function main(){
 					UserRole,
 					Technology,
 					LastAuthUpdate
-				) VALUES (?,?,?,?,?,?,?)
-		`,[creationDate,'Profesor','profesor@gmail.com','123456','Expert','CSS',creationDate]);
+				) VALUES (?,?,?,SHA2(?, 512),?,?,?)
+		`,
+      [
+        creationDate,
+        "Profesor",
+        "profesor@gmail.com",
+        "123456",
+        "Expert",
+        "CSS",
+        creationDate,
+      ]
+    );
 
+    console.log("Finalizado profesor");
 
-		console.log("Finalizado profesor");
-
-		await connection.query(`
+    await connection.query(
+      `
 				INSERT INTO users (
 					CreationDate,
 					Username,
@@ -113,22 +123,26 @@ async function main(){
 					Password,
 					UserRole,
 					LastAuthUpdate
-				) VALUES (?,?,?,?,?,?)
-		`,[creationDate,'Alumno','alumno@gmail.com','123456','Student',creationDate]);
-		console.log("Finalizado alumno");
-
-	} catch (error) {
-		console.error('ERROR:', error.message);
-	} finally{
-		if (connection) {
-			connection.release();
-		}
-		process.exit();
-	}
+				) VALUES (?,?,?,SHA2(?, 512),?,?)
+		`,
+      [
+        creationDate,
+        "Alumno",
+        "alumno@gmail.com",
+        "123456",
+        "Student",
+        creationDate,
+      ]
+    );
+    console.log("Finalizado alumno");
+  } catch (error) {
+    console.error("ERROR:", error.message);
+  } finally {
+    if (connection) {
+      connection.release();
+    }
+    process.exit();
+  }
 }
 
 main();
-
-
-
-
