@@ -70,9 +70,10 @@ const newUsers = async (req, res, next) => {
         Technology,
       ]
     );
-    let cuerpo = `Bienvenido a Alejandria, por favor verifique su correo <a href="http://127.0.0.1:3000/users/validate/${RegistrationCode} ">aqui!</a>`;
+    let cuerpo = `Bienvenido a Alejandria, por favor verifique su correo <a href="http://127.0.0.1:3000/users/validate/${RegistrationCode}">aqui!</a>`;
     let subject = "Correo de verificación Alejandria";
-    //(no existe) envia correo de validacion
+
+    //envia correo de validacion
     const msg = {
       to: email,
       from: process.env.SENDGRID_FROM,
@@ -85,6 +86,8 @@ const newUsers = async (req, res, next) => {
     };
 
     await verEmail.send(msg);
+
+//Fixme validacion de correo y pass
 
     res.status(201).send({
       Status: "ok",

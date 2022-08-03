@@ -6,7 +6,7 @@ const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 
-const { newUsers } = require("./controllers/users");
+const { newUsers, validateUsers, loginUsers } = require("./controllers/users");
 
 const app = express();
 
@@ -23,6 +23,10 @@ app.listen(PORT, () => {
 //* Endpoints
 
 app.post("/users", newUsers);
+
+app.get("/users/validate/:RegistrationCode", validateUsers);
+
+app.post("/users/login/", loginUsers);
 
 //*errores
 app.use((error, req, res, next) => {

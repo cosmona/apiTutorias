@@ -2,24 +2,30 @@
 
 const getDB = require('../../db/db');
 
-const validateUser = async (req, res, next) => {
+const validateUsers = async (req, res, next) => {
     let connection;
+
+    console.log('OOOmmmpa');
     try {
       // pido conneción al DB
       connection = await getDB();
   
-      const { registrationCode } = req.params;
+      const { RegistrationCode } = req.params;
+      console.log('req.params', req.params)
+
+      console.log('RegistrationCode', RegistrationCode);
   
       // comprobamos si existe un usuario con este registrationCode
       const [user] = await connection.query(
         `
-          SELECT id
-          FROM users
-          WHERE RegistrationCode = ?
-      `,
-        [registrationCode]
-      );
-  
+        SELECT id
+        FROM users
+        WHERE RegistrationCode = ?
+        `,
+        [RegistrationCode]
+        );
+        console.log('user2', user)
+        
       // y si no lo hay dar un error
       if (user.length === 0) {
         const error = new Error(
@@ -33,10 +39,10 @@ const validateUser = async (req, res, next) => {
       await connection.query(
         `
           UPDATE users
-          SET active=true, registrationCode=NULL
-          WHERE registrationCode=?
+          SET Activation=true, RegistrationCode=NULL
+          WHERE RegistrationCode=?
       `,
-        [registrationCode]
+        [RegistrationCode]
       );
   
       res.send({
@@ -50,4 +56,4 @@ const validateUser = async (req, res, next) => {
     }
   };
   
-  module.exports = validateUser;
+  module.exports = validateUsers;

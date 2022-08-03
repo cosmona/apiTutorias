@@ -52,12 +52,13 @@ Bonus funcionalidades:
 ### USERS
 ---
 
- - [ ] ⭕️🔒️💀️ **GET - /users/:id** - Devolver información del usuario
-       | Token obligatorio y si el usuario coincide dar más información
+ - [X] ⭕️🔒️💀️ **POST - /users/** - Crear el usuario
 
- - [ ] ⭕️ **POST - /users/login** - Hará el login de un usuario y
+ - [X] ⭕️🔒️💀️ **POST - /users/validate/:RegistrationCode** - Validar el usuario
+
+ - [X] ⭕️ **POST - /users/login** - Hará el login de un usuario y
        devolverá el TOKEN
-       
+
  - [ ] ⭕️🔒️💀️ **PUT - /users/:id** - Editar un usuario | Solo el
        propio usuario
 
