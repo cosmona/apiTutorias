@@ -4,7 +4,9 @@
   "description": "DESCRIPCIÓN Plataforma donde estudiantes de programación realizan consultas concretas a expertos en cada tecnología. Las preguntas están disponibles para todos los usuarios, las respuestas sólo para los usuarios registrados.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "keywords": [],
   "author": "",
