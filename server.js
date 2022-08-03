@@ -6,9 +6,14 @@ const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 
-const { newUsers, validateUsers, loginUsers } = require("./controllers/users");
+const { newUsers, validateUsers, loginUsers, userEdit } = require("./controllers/users");
 
 const app = express();
+
+//* Middlewares
+const {isUser, userExists} = require("./Middlewares");
+ 
+
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -27,6 +32,8 @@ app.post("/users", newUsers);
 app.get("/users/validate/:RegistrationCode", validateUsers);
 
 app.post("/users/login/", loginUsers);
+
+app.put("/users", isUser, userEdit);
 
 //*errores
 app.use((error, req, res, next) => {

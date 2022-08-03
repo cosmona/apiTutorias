@@ -51,7 +51,6 @@ Bonus funcionalidades:
 
 ### USERS
 ---
-
  - [X] ⭕️🔒️💀️ **POST - /users/** - Crear el usuario
 
  - [X] ⭕️🔒️💀️ **POST - /users/validate/:RegistrationCode** - Validar el usuario
@@ -59,7 +58,7 @@ Bonus funcionalidades:
  - [X] ⭕️ **POST - /users/login** - Hará el login de un usuario y
        devolverá el TOKEN
 
- - [ ] ⭕️🔒️💀️ **PUT - /users/:id** - Editar un usuario | Solo el
+ - [X] ⭕️🔒️💀️ **PUT - /users/:id** - Editar un usuario | Token y Solo el
        propio usuario
 
  - [ ] ⭕️🔒️💀️ **PUT - /users/:id/password** - Editar la contraseña de un usuario | Solo el propio usuario
@@ -73,6 +72,8 @@ Bonus funcionalidades:
 - [ ] ⭕️ **POST /users/recover-password**
 
 - [ ] ⭕️🔒️💀️ **POST /users/reset-password**
+
+- [ ] ⭕️🔒️💀️ **get /users/** - mostrar usuario
   
 
 ### QUESTIONS

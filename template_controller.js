@@ -1,6 +1,6 @@
 'use strict';
 
-const getDB = require('../../db/db');
+const connectDB = require('../../db/db');
 
 const validateUsers = async (req, res, next) => {
     let connection;
@@ -8,7 +8,7 @@ const validateUsers = async (req, res, next) => {
     console.log('OOOmmmpa');
     try {
       // pedir connection al DB
-      connection = await getDB();
+      connection = await connectDB();
   
       //Insert code
   
