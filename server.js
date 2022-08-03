@@ -6,7 +6,12 @@ const morgan = require("morgan");
 const cors = require("cors");
 require("dotenv").config();
 
+
+//* Controllers
 const { newUsers, validateUsers, loginUsers, userEdit } = require("./controllers/users");
+const { newQuestions } = require("./controllers/questions");
+
+
 
 const app = express();
 
@@ -25,7 +30,8 @@ app.listen(PORT, () => {
   console.log(`Servidor activo en puerto ${PORT}`);
 });
 
-//* Endpoints
+//* Endpoints USers
+
 
 app.post("/users", newUsers);
 
@@ -34,6 +40,10 @@ app.get("/users/validate/:RegistrationCode", validateUsers);
 app.post("/users/login/", loginUsers);
 
 app.put("/users", isUser, userEdit);
+
+//* Endpoints Questions
+
+app.post("/questions", isUser, newQuestions)
 
 //*errores
 app.use((error, req, res, next) => {

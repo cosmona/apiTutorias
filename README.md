@@ -82,7 +82,7 @@ Bonus funcionalidades:
   
 - [ ] ⭕️ **GET - /questions/:id** - JSON que muestra información de una entrada | Sin token
 
-- [ ] ⭕️🔒️ **POST - /questions** - crea una entrada | Token obligatorio
+- [X] ⭕️🔒️ **POST - /questions** - crea una entrada | Token obligatorio
 
 - [ ] ⭕️🔒️💀️ **PUT - /questions/:id** - edita una entrada | Token obligatorio y mismo usuario.
 
