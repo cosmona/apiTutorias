@@ -1,22 +1,20 @@
-'use strict';
+"use strict";
 
-const jwt = require('jsonwebtoken');
-const connectDB = require('../../db/db');
-const {validate} = require('../../helpers');
-const {registrationSchema} = require('../../schemas');
-
-
+const jwt = require("jsonwebtoken");
+const connectDB = require("../../db/db");
+const { validate } = require("../../helpers");
+const { registrationSchema } = require("../../schemas");
 
 const loginUsers = async (req, res, next) => {
-    let connection;
+  let connection;
 
-    console.log('login');
-    try {
-      // pedir connection al DB
-      connection = await connectDB();
-      console.log('connection', connection);
-  
-      // valido los datos del body
+  console.log("login");
+  try {
+    // pedir connection al DB
+    connection = await connectDB();
+    console.log("connection", connection);
+
+    // valido los datos del body
     await validate(registrationSchema, req.body);
 
     // Recojo de req.body el email y la password
@@ -50,23 +48,24 @@ const loginUsers = async (req, res, next) => {
     const info = {
       id: user[0].ID,
       role: user[0].UserRole,
+      technology: user[0].technology,
     };
 
     // generar token
-    const token = jwt.sign(info, process.env.JWT_SECRET, { expiresIn: '1d' });
+    const token = jwt.sign(info, process.env.JWT_SECRET, { expiresIn: "1d" });
 
-      res.send({
-        status: 'ok',
-        message: 'Usuario logeado',
-        data: {
-          token,
-        },
-      });
-    } catch (error) {
-      next(error);
-    } finally {
-      if (connection) connection.release();
-    }
-  };
-  
-  module.exports = loginUsers;
+    res.send({
+      status: "ok",
+      message: "Usuario logeado",
+      data: {
+        token,
+      },
+    });
+  } catch (error) {
+    next(error);
+  } finally {
+    if (connection) connection.release();
+  }
+};
+
+module.exports = loginUsers;

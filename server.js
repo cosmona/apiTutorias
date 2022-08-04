@@ -13,13 +13,17 @@ const {
   loginUsers,
   userEdit,
 } = require("./controllers/users");
-const { newQuestions, getAllQuestions } = require("./controllers/questions");
+const {
+  newQuestions,
+  getAllQuestions,
+  getQuestions,
+} = require("./controllers/questions");
 const { newAnswers } = require("./controllers/answers/index");
 
 const app = express();
 
 //* Middlewares
-const { isUser, userExists } = require("./Middlewares");
+const { isUser, userExists, isExpert } = require("./Middlewares");
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -45,11 +49,13 @@ app.put("/users", isUser, userEdit);
 
 app.post("/questions", isUser, newQuestions);
 
+app.get("/questions/:id", getQuestions);
+
 app.get("/questions", getAllQuestions);
 
 //* Endpoints Answers
 
-app.post("/answers", isUser, newAnswers);
+app.post("/answers", isUser, isExpert, newAnswers);
 
 //*errores
 app.use((error, req, res, next) => {
