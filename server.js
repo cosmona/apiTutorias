@@ -9,7 +9,7 @@ require("dotenv").config();
 
 //* Controllers
 const { newUsers, validateUsers, loginUsers, userEdit } = require("./controllers/users");
-const { newQuestions } = require("./controllers/questions");
+const { newQuestions, getAllQuestions } = require("./controllers/questions");
 
 
 
@@ -43,7 +43,10 @@ app.put("/users", isUser, userEdit);
 
 //* Endpoints Questions
 
-app.post("/questions", isUser, newQuestions)
+app.post("/questions", isUser, newQuestions);
+
+app.get("/questions", getAllQuestions);
+
 
 //*errores
 app.use((error, req, res, next) => {

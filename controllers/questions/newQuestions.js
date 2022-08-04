@@ -5,26 +5,25 @@ const {format} = require("date-fns");
 
 const newQuestions = async (req, res, next) => {
     let connection;
+
+	console.log('Ompa question', );
 	const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
 
     try {
     	// pedir connection al DB
     	connection = await connectDB();
 		
-		//* recogemos question y technology
-		const {question, technology} = req.body;
-		console.log('technology', technology)
-		console.log('question', question)
+		//* recogemos question, title y technology
+		const {question, title, technology} = req.body;
 
 		// *recogemos el id desde el token
 		const {id} = req.userToken;
-		console.log('id', id)
 
 		//* Query
 		await connection.query(`
-			INSERT INTO questions (questiondate, question, user_id,technology) 
-			VALUES (?,?,?,?) 
-		`,[creationDate,question,id,technology]);
+			INSERT INTO questions (questiondate, title, question, user_id, technology) 
+			VALUES (?,?,?,?,?) 
+		`,[creationDate, title, question,id,technology]);
 
       res.send({
         status: 'ok',

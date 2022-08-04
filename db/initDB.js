@@ -46,6 +46,7 @@ async function main() {
 		(
 			ID INTEGER PRIMARY KEY NOT NULL AUTO_INCREMENT,
 			QuestionDate DATETIME NOT NULL,
+			Title TEXT NOT NULL,
 			Question TEXT NOT NULL,
 			User_ID INTEGER NOT NULL,
 			Technology ENUM("HTML", "CSS", "JavaScript", "SQL", "Node", "React") DEFAULT null,

@@ -8,11 +8,14 @@ const connectDB = require('../db/db');
 const isUser = async (req, res, next) => {
   let connection;
 
+  console.log('Ompa isUser', );
+
   try {
     // pido conneción al DB
     connection = await connectDB();
 
     const { authorization } = req.headers;
+    console.log('authorization', authorization)
 
     // si no tengo Authorization salgo con un error
     if (!authorization) {
@@ -57,5 +60,7 @@ const isUser = async (req, res, next) => {
     if (connection) connection.release();
   }
 };
+
+
 
 module.exports = isUser;

@@ -78,7 +78,7 @@ Bonus funcionalidades:
 
 ### QUESTIONS
 ---
-- [ ] ⭕️ **GET - /questions** - JSON con lista todas las entradas y buscar entradas | Sin token - GET - /questions?name=nombre&category=categoria&date=fecha&answer=true
+- [X] ⭕️ **GET - /questions** - JSON con lista todas las entradas y buscar entradas | Sin token - GET - /questions?name=nombre&category=categoria&date=fecha&answer=true
   
 - [ ] ⭕️ **GET - /questions/:id** - JSON que muestra información de una entrada | Sin token
 

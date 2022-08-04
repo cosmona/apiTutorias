@@ -24,7 +24,7 @@ const userEdit = async (req, res, next) => {
     } */
 
     // Modioficar la información actual del usuario en la base de datos
-    let consult ="UPDATE users SET ";
+    let consult =`UPDATE users SET `;
     if(email){        
         consult += `Email="${email}"`;
     }
