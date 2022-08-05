@@ -1,26 +1,30 @@
 "use strict";
 
+//^ npm
 const jwt = require("jsonwebtoken");
+
+//^ Importamos funcion que conecta a la BD
 const connectDB = require("../../db/db");
+
+//^ Importamos funcion validate y schema que comprueba los datos
 const { validate } = require("../../helpers");
 const { registrationSchema } = require("../../schemas");
 
+//& Login de usuario
 const loginUsers = async (req, res, next) => {
   let connection;
 
-  console.log("login");
   try {
-    // pedir connection al DB
+    //* pedir connection al DB
     connection = await connectDB();
-    console.log("connection", connection);
 
-    // valido los datos del body
+    //* valido los datos del body
     await validate(registrationSchema, req.body);
 
-    // Recojo de req.body el email y la password
+    //* Recojemos parametros de req.body el email y la password
     const { email, password } = req.body;
 
-    // selecionamos el usuario con este email y password
+    //~ Consulta SQL - selecionamos el usuario con este email y password
     const [user] = await connection.query(
       `
         SELECT ID, UserRole, Activation
@@ -29,31 +33,32 @@ const loginUsers = async (req, res, next) => {
     `,
       [email, password]
     );
-
-    // si no encuentro el usuario salgo con error
+    //TODO los dos errore en un if?
+    //* si no encuentro el usuario salgo con error
     if (user.length === 0) {
       const error = new Error("Email o password incorrecto");
       error.httpStatus = 401;
       throw error;
     }
 
-    // comprobar que el usuario sea activo
+    //* comprobar que el usuario sea activo
     if (!user[0].Activation) {
       const error = new Error("El usuario no está activado");
       error.httpStatus = 401;
       throw error;
     }
 
-    // creo objeto con los datos que quiero guardar en el token
+    //* creo objeto con los datos que quiero guardar en el token
     const info = {
       id: user[0].ID,
       role: user[0].UserRole,
       technology: user[0].technology,
     };
 
-    // generar token
+    //* generar token
     const token = jwt.sign(info, process.env.JWT_SECRET, { expiresIn: "1d" });
 
+    //* Devolvemos resultado
     res.send({
       status: "ok",
       message: "Usuario logeado",
@@ -64,6 +69,7 @@ const loginUsers = async (req, res, next) => {
   } catch (error) {
     next(error);
   } finally {
+    //* Acaba la conexion
     if (connection) connection.release();
   }
 };

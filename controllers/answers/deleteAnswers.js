@@ -1,33 +1,33 @@
 'use strict';
 
+//^ Importamos funcion que conecta a la BD
 const connectDB = require('../../db/db');
 
+//& Borra respuestas
 const deleteAnswers = async (req, res, next) => {
-    let connection;
+  let connection;
 
 	try {
-      // pedir connection al DB
+      //* Conexion al DB
       connection = await connectDB();
   
-      //*recuperar parametros
-
+      //* Recuperar parametros desde el endpoint (:id) e idUser (token)
       const idAnswer = req.params.id;
-      console.log('idAnswer', idAnswer)
-
-      
       const idUser = req.userToken.id;
-      console.log('idUser', idUser)
 
-
+      //~ Consulta SQL
       const estate = await connection.query(`
-      DELETE FROM answers WHERE User_ID = ? AND ID = ?;
-      `,[idUser,idAnswer])
+            DELETE FROM answers WHERE User_ID = ? AND ID = ?;`,
+            [idUser, idAnswer]);
+
+      //* si no existe la respuesta
       if(estate[0].affectedRows === 0){
         const error = new Error("No existe la respuesta");
         error.httpStatus = 409;
         throw error;
       }
       
+      //* Devolvemos resultado
       res.send({
         status: 'ok',
         message: 'Answer borrada',
@@ -35,6 +35,7 @@ const deleteAnswers = async (req, res, next) => {
     } catch (error) {
       next(error);
     } finally {
+      //* Acaba la conexion
       if (connection) connection.release();
     }
   };

@@ -1,20 +1,23 @@
 'use strict';
 
+//^ Importamos funcion que conecta a la BD
 const connectDB = require('../../db/db');
 
+//& Muestra todas las preguntas
 const getAllQuestions = async (req, res, next) => {
     let connection;
 
-    console.log('OOOmmmpa');
     try {
-      // pedir connection al DB
+      //* Conexion al DB
       connection = await connectDB();
-  
-      //Recoger parametros
+    
+      //* Recoger parametros
       const { title, technology, questionDate, answered } = req.query;
 
+      //~ Consulta SQL
       let consult = `SELECT * FROM questions`;
       
+      //~ monta el sql 
       if (title || technology || questionDate || answered){
         consult += ` WHERE `;
         
@@ -40,19 +43,11 @@ const getAllQuestions = async (req, res, next) => {
           consult += `answered="${answered}"`;
         }
       }
-
-      console.log('consult', consult);
       
+      //~ ejecuta SQL
       const [listQuestions] = await connection.query(consult);
-      //SELECT * FROM questions WHERE name=${name} AND technology=${technology} AND currentDate=${currentDate} AND answer=${answer}
-
-      /* console.log('req.params', req.params);
-      console.log('answer', answer);
-      console.log('currentDate', currentDate);
-      console.log('technology', technology);
-      console.log('name', name);
- */
   
+      //* Devolvemos resultado
       res.send({
         status: 'ok',
         message: 'Questions mostradas',
@@ -61,6 +56,7 @@ const getAllQuestions = async (req, res, next) => {
     } catch (error) {
       next(error);
     } finally {
+      //* Acaba la conexion
       if (connection) connection.release();
     }
   };

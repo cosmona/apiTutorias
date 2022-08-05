@@ -51,7 +51,6 @@ app.get("/questions/:id", getQuestions);
 //* PUT - /questions/:id** - edita una entrada | Token obligatorio y mismo usuario.
 app.put("/questions/:id", isUser,editQuestions)
 
-
 //* DELETE - /questions/:id** - borra una entrada | Token obligatorio y mismo usuario.
 app.delete("/questions/:id",isUser, deleteQuestions)
 
@@ -64,6 +63,7 @@ app.post("/answers", isUser, isExpert, newAnswers);
 //* DELETE - /answers/:id** - borra una respuesta | Token obligatorio y mismo usuario.
 app.delete("/answers/:id", isUser, deleteAnswers);
 
+//* PUT - /answers/:id** - edita una respuesta | Token obligatorio y mismo usuario.
 app.put("/answers/:id", isUser,editAnswers)
 
 //& Errores

@@ -1,75 +1,70 @@
 "use strict";
 
-const connectDB = require("../../db/db");
+//^ npm import
 const { format } = require("date-fns");
 
+//^ Importamos funcion que conecta a la BD
+const connectDB = require("../../db/db");
+
+//& Crea respuestas
 const newAnswers = async (req, res, next) => {
   let connection;
-  const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
-  // console.log("BEEPBOOP new answers ");
+
   try {
-    // pedir connection al DB
+    //* formatea la fecha para la bd
+    const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+    
+    //* Conexion al DB
     connection = await connectDB();
-    //  answer desde el body
+    
+    //* //* Recuperar parametros desde el body y desde el token
     const { answer, question_id } = req.body;
-
-    // console.log("question_id", question_id);
-    // console.log("answer", answer);
-
-    // id del usuario
     const user_id = req.userToken.id;
 
-    //Insert code
-    //revisar si la pregunta con ese id existe
+    //~ Consulta SQL
     const question = await connection.query(
-      `SELECT * 
-      FROM questions
+      `SELECT * FROM questions
       WHERE id=?;`,
       [question_id]
     );
 
+    //* si no existe la pregunta 
     if (question.length === 0) {
       const error = new Error("Esta pregunta no existe");
       error.httpStatus = 409;
       throw error;
     }
-    //chequea que esta persona no haya respondido ya
+
+    //* chequea que esta persona no haya respondido ya
     const answerExist = await connection.query(
-      `
-      SELECT *
-      FROM answers
-      WHERE User_id = ? AND question_id=?;
-      `,
+      `SELECT * FROM answers
+      WHERE User_id = ? AND question_id=?;`,
       [user_id, question_id]
     );
 
-    // console.log("ANSWER EXIST!!!!!!!!!!", answerExist);
-
+    //* si ya ha respndido la pregunta
     if (answerExist[0].length !== 0) {
       const error = new Error("Ya has respondido esta pregunta");
       error.httpStatus = 409;
       throw error;
     }
 
+    //~ Consulta SQL
     await connection.query(
-      `
-      INSERT INTO answers( AnswerDate, Answer, User_ID, Question_ID )
-      VALUES (?,?,?,?);
-      `,
+      `INSERT INTO answers( AnswerDate, Answer, User_ID, Question_ID )
+      VALUES (?,?,?,?);`,
       [creationDate, answer, user_id, question_id]
     );
 
-    //cambia el valor answered en la tabla questions a true
+    //~ Consulta SQL - cambia el valor answered en la tabla questions a true
     await connection.query(
-      `
-        UPDATE questions
+      `UPDATE questions
         SET Answered=1
-        WHERE ID=?;
-
-      `,
+       WHERE ID=?;`,
       [question_id]
     );
 
+    //* Devolvemos resultado
     res.send({
       status: "ok",
       message: "Respuesta creada",
@@ -77,6 +72,7 @@ const newAnswers = async (req, res, next) => {
   } catch (error) {
     next(error);
   } finally {
+    //* Acaba la conexion
     if (connection) connection.release();
   }
 };

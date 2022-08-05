@@ -1,21 +1,20 @@
 'use strict';
 
+//^ Importamos funcion que conecta a la BD
 const getDB = require('../../db/db');
 
+//& Valida Usuario
 const validateUsers = async (req, res, next) => {
     let connection;
 
-    console.log('OOOmmmpa');
     try {
-      // pido conneción al DB
+      //* Conexion al DB
       connection = await getDB();
-  
+      
+      //* Recogemos parametros
       const { RegistrationCode } = req.params;
-      console.log('req.params', req.params)
-
-      console.log('RegistrationCode', RegistrationCode);
-  
-      // comprobamos si existe un usuario con este registrationCode
+      
+      //~ Consulta SQL - comprobamos si existe un usuario con este registrationCode
       const [user] = await connection.query(
         `
         SELECT id
@@ -24,9 +23,9 @@ const validateUsers = async (req, res, next) => {
         `,
         [RegistrationCode]
         );
-        console.log('user2', user)
+
         
-      // y si no lo hay dar un error
+      //*si no existe el codigo de validacin
       if (user.length === 0) {
         const error = new Error(
           'Ningun usuario encontrado con este código de validación'
@@ -35,7 +34,7 @@ const validateUsers = async (req, res, next) => {
         throw error;
       }
   
-      // activo el usuario y borro RegistrationCode
+      //* activamos el usuario y borramos RegistrationCode
       await connection.query(
         `
           UPDATE users
@@ -45,6 +44,7 @@ const validateUsers = async (req, res, next) => {
         [RegistrationCode]
       );
   
+      //* Devolvemos resultados
       res.send({
         status: 'ok',
         message: 'Usuario validado',
@@ -52,6 +52,7 @@ const validateUsers = async (req, res, next) => {
     } catch (error) {
       next(error);
     } finally {
+      //* Acabamos la conexion
       if (connection) connection.release();
     }
   };

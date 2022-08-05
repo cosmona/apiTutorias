@@ -1,51 +1,48 @@
 "use strict";
 
 // require("dotenv").config(); //!IMPORTANTE AQUI (NO IDEA de que necesitaba esto)
-const connectDB = require("../../db/db");
+//^ npm import
 const { format } = require("date-fns");
 const verEmail = require("@sendgrid/mail");
-
-verEmail.setApiKey(process.env.SENDGRID_API_KEY);
-
 const crypto = require("crypto");
 
-//crea un nuevo user en la base de datos
+//^ Importamos funcion que conecta a la BD
+const connectDB = require("../../db/db");
+
+
+//* coge el secreto de la api de sengrid y lo aplica
+verEmail.setApiKey(process.env.SENDGRID_API_KEY);
+
+//& Crea usuario
 const newUsers = async (req, res, next) => {
   let connection;
+  
+  //* formatea la fecha para la BD
   const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
-
+  
   try {
-    //debug
-    console.log("new oompa user");
-    console.log(req.body);
-    const { username, email, password, userRole, Technology } = req.body;
-
-    //Se llama a connectDB
+    //* Conexion al DB
     connection = await connectDB();
+    
+    //* Recuperamos parametros 
+    const { username, email, password, userRole, Technology } = req.body;    
 
-    //consultar DB para ver si el usuario existe
+    //~ Consulta SQL - Consultar DB para ver si el usuario existe
     const [users] = await connection.query(
-      ` 
-      SELECT * 
-      FROM users
-      WHERE email = ?
-      ;
+      `SELECT * FROM users
+      WHERE email = ?;
       `,
       [email]
     );
-    console.log("users", users);
-
-    //genera un codigo unico
-
-    //si existe, da error
+    
+    //* si existe, da error
     if (users.length !== 0) {
       const error = new Error("Este email ya esta en uso");
       error.httpStatus = 409;
       throw error;
     }
-    //
-
-    //si no existe, crea el usuario en la DB inactivo y el codigo unico
+  
+    //* si no existe, crea el usuario en la DB inactivo y el codigo unico
     const RegistrationCode = crypto.randomBytes(25).toString("hex");
 
     await connection.query(
@@ -73,7 +70,7 @@ const newUsers = async (req, res, next) => {
     let cuerpo = `Bienvenido a Alejandria, por favor verifique su correo <a href="http://127.0.0.1:3000/users/validate/${RegistrationCode}">aqui!</a>`;
     let subject = "Correo de verificación Alejandria";
 
-    //envia correo de validacion
+    //* envia correo de validacion
     const msg = {
       to: email,
       from: process.env.SENDGRID_FROM,
@@ -87,18 +84,20 @@ const newUsers = async (req, res, next) => {
 
     await verEmail.send(msg);
 
-//Fixme validacion de correo y pass
+    //TODO validacion de correo y pass
 
+    //* Devolvemos resultado
     res.status(201).send({
       Status: "ok",
       Message: "Usuario creado! por favor verifique su cuenta ",
     });
+
   } catch (error) {
-    // console.log("error en new user", error);
     next(error);
   } finally {
-    if (connection) {
-      connection.release();
+      //* Acaba la conexion
+      if (connection) {
+        connection.release();
     }
   }
 };

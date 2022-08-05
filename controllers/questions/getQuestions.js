@@ -1,36 +1,34 @@
 "use strict";
 
+//^ Importamos funcion que conecta a la BD
 const connectDB = require("../../db/db");
 
+//& Muestra una pregunta
 const getQuestions = async (req, res, next) => {
   let connection;
 
-  console.log("BEEPBOOP una pregunta");
   try {
-    // pedir connection al DB
+    //* Conexion al DB
     connection = await connectDB();
 
-    //Recoger parametros
+    //* Recoger parametros
     const { id } = req.params;
 
-    const question = await connection.query(
-      `
-    SELECT * 
-    FROM questions
-    WHERE id = ?;
-    `,
-      [id]
-    );
+    //~ Consulta SQL de una pregunta por id
+    const question = await connection.query(`
+        SELECT * FROM questions
+        WHERE id = ?;
+    `,[id]);
 
-    const [answers] = await connection.query(
-      `
+
+    //~ Consulta SQL de sus respuestas
+    const [answers] = await connection.query(`
     SELECT * 
     FROM answers
-    WHERE question_id = ?;
-    `,
-      [id]
-    );
+    WHERE question_id = ?;`
+    ,[id]);
 
+    //* Devolvemos resultado
     res.send({
       status: "ok",
       message: "Questions mostradas",
@@ -42,6 +40,7 @@ const getQuestions = async (req, res, next) => {
   } catch (error) {
     next(error);
   } finally {
+    //* Acaba la conexion
     if (connection) connection.release();
   }
 };

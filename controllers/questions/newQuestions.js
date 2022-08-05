@@ -1,32 +1,33 @@
 'use strict';
-
-const connectDB = require('../../db/db');
+//^ npm import
 const {format} = require("date-fns");
 
+//^ Importamos funcion que conecta a la BD
+const connectDB = require('../../db/db');
+
+//& Crea preguntas
 const newQuestions = async (req, res, next) => {
     let connection;
 
-	console.log('Ompa question', );
-	const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
-
+	
     try {
-    	// pedir connection al DB
-    	connection = await connectDB();
+	    //* formatea la fecha para la bd
+		const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
+
+	    //* Conexion al DB
+		connection = await connectDB();
 		
-		//* recogemos question, title y technology
+		//* recogemos question, title y technology y el id desde el token
 		const {question, title, technology} = req.body;
-		
-
-		// *recogemos el id desde el token
 		const {id} = req.userToken;
-		console.log('id', id)
 
-		//* Query
+	    //~ Consulta SQL
 		await connection.query(`
 			INSERT INTO questions (questiondate, title, question, user_id, technology) 
 			VALUES (?,?,?,?,?) 
 		`,[creationDate, title, question,id,technology]);
 
+    //* Devolvemos resultado
       res.send({
         status: 'ok',
         message: 'Question creada',
@@ -34,6 +35,7 @@ const newQuestions = async (req, res, next) => {
     } catch (error) {
       next(error);
     } finally {
+    //* Acaba la conexion
       if (connection) connection.release();
     }
   };

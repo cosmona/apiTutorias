@@ -101,7 +101,6 @@ usuario admin.
 
 ### ANSWERS
 
----
 
 - [x] ⭕️🔒️ ****POST - /answers** - crea una respuesta | Token obligatorio y
       solo si es especialis**ta

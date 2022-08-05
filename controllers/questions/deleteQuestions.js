@@ -1,48 +1,45 @@
 'use strict';
 
+//^ Importamos funcion que conecta a la BD
 const connectDB = require('../../db/db');
 
+//& Borra una pregunta
 const deleteQuestions = async (req, res, next) => {
     let connection;
 
 	try {
-      // pedir connection al DB
+      //* Conexion al DB
       connection = await connectDB();
   
       //*recuperar parametros
-
       const idQuestion = req.params.id;
-      console.log('idQuestion', idQuestion)
-
-      
       const idUser = req.userToken.id;
-      console.log('idUser', idUser)
 
-      //Borra tabla answers_votes asociada
+      //~ Consulta SQL - Borra los votos
       await connection.query(`
-      DELETE FROM answer_votes WHERE Question_ID = ?;
+        DELETE FROM answer_votes WHERE Question_ID = ?;
       `,[idQuestion]);
 
-      //Borra todas las respuestas asociadas
+      //~ Consulta SQL - Borra todas las respuestas asociadas
       await connection.query(`
-      DELETE FROM answers WHERE Question_ID = ?;
+        DELETE FROM answers WHERE Question_ID = ?;
       `,[idQuestion]);
 
-      //Borra la pregunta
+      //~ Consulta SQL - Borra la pregunta
       const estate = await connection.query(`
-      DELETE FROM questions WHERE User_ID = ? AND ID = ?;
+        DELETE FROM questions WHERE User_ID = ? AND ID = ?;
       `,[idUser,idQuestion])
+
+      //* Si no exite la pregunta
       if(estate[0].affectedRows === 0){
         const error = new Error("No existe la pregunta");
         error.httpStatus = 409;
         throw error;
       }
       
-      //Control de errores - usuario id y pregunta id no coinciden
+      //? Control de errores - usuario id y pregunta id no coinciden
       
-
-
-      
+      //* Devolvemos resultados
       res.send({
         status: 'ok',
         message: 'Preguntas y respuestas borradas',
@@ -50,7 +47,8 @@ const deleteQuestions = async (req, res, next) => {
     } catch (error) {
       next(error);
     } finally {
-      if (connection) connection.release();
+        //* Acaba la conexion
+        if (connection) connection.release();
     }
   };
   
