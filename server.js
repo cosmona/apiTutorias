@@ -8,8 +8,8 @@ require("dotenv").config();
 
 //* Controllers
 const { newUsers, validateUsers, loginUsers, userEdit } = require("./controllers/users");
-const { newQuestions, getAllQuestions, getQuestions, deleteQuestions } = require("./controllers/questions");
-const { newAnswers, deleteAnswers } = require("./controllers/answers");
+const { newQuestions, getAllQuestions, getQuestions,editQuestions, deleteQuestions } = require("./controllers/questions");
+const { newAnswers, deleteAnswers, editAnswers } = require("./controllers/answers");
 
 //* Middlewares
 const { isUser, userExists, isExpert } = require("./middlewares");
@@ -48,6 +48,10 @@ app.post("/questions", isUser, newQuestions);
 //* GET - /questions/:id** - JSON que muestra información de una entrada | Sin token
 app.get("/questions/:id", getQuestions);
 
+//* PUT - /questions/:id** - edita una entrada | Token obligatorio y mismo usuario.
+app.put("/questions/:id", isUser,editQuestions)
+
+
 //* DELETE - /questions/:id** - borra una entrada | Token obligatorio y mismo usuario.
 app.delete("/questions/:id",isUser, deleteQuestions)
 
@@ -59,6 +63,8 @@ app.post("/answers", isUser, isExpert, newAnswers);
 
 //* DELETE - /answers/:id** - borra una respuesta | Token obligatorio y mismo usuario.
 app.delete("/answers/:id", isUser, deleteAnswers);
+
+app.put("/answers/:id", isUser,editAnswers)
 
 //& Errores
 app.use((error, req, res, next) => {

@@ -65,6 +65,8 @@ usuario admin.
 
 #### Bonus:
 
+- [ ] ⭕️🔒️💀️ **DELETE - /users/:id/** - borra un usuario | Token obligatorio y mismo usuario
+  
 - [ ] ⭕️🔒️💀️ **PUT - /users/:id/password** - Editar la contraseña de un usuario | Solo el propio usuario
 
 - [ ] ⭕️🔒️💀️ **POST - /users/:id/photos** - añade una imagen a una entrada | Token obligatorio y mismo usuario.
@@ -87,9 +89,9 @@ usuario admin.
 
 - [x] ⭕️🔒️ **POST - /questions** - crea una entrada | Token obligatorio
 
-- [ ] ⭕️🔒️💀️ **PUT - /questions/:id** - edita una entrada | Token obligatorio y mismo usuario.
+- [x] ⭕️🔒️💀️ **PUT - /questions/:id** - edita una entrada | Token obligatorio y mismo usuario.
 
-- [X] ⭕️🔒️💀️ **DELETE - /questions/:id** - borra una entrada | Token obligatorio y mismo usuario.
+- [x] ⭕️🔒️💀️ **DELETE - /questions/:id** - borra una entrada | Token obligatorio y mismo usuario.
 
 #### Bonus:
 
@@ -101,23 +103,23 @@ usuario admin.
 
 ---
 
-- [x] ⭕️🔒️ **POST - /answers** - crea una respuesta | Token obligatorio y
-      solo si es especialista
+- [x] ⭕️🔒️ ****POST - /answers** - crea una respuesta | Token obligatorio y
+      solo si es especialis**ta
 
 - [ ] ⭕️🔒️💀️ **POST - /answers/:id/votes** - vota una respuesta | Token
       obligatorio pero cada usuario solo puede votar una vez y las
       entradas no pueden ser votadas por el usuario que las creó.
 
-- [ ] ⭕️ **GET - /answers/:id** - JSON que muestra información de una
-      respuesta | Sin token.
-
-- [ ] ⭕️🔒️💀️ **PUT - /answers/:id** - edita una
+- [x] ⭕️🔒️💀️ **PUT - /answers/:id** - edita una
       respuesta | Token obligatorio y mismo usuario.
 
-- [X] ⭕️🔒️💀️ **DELETE - /answers/:id** - borra una respuesta | Token
+- [x] ⭕️🔒️💀️ **DELETE - /answers/:id** - borra una respuesta | Token
       obligatorio y mismo usuario.
 
 #### Bonus:
+
+- [ ] ⭕️ **GET - /answers/:id** - JSON que muestra información de una
+      respuesta | Sin token.
 
 - [ ] ⭕️🔒️💀️ **POST - /answers/:id/photos** - añade una imagen a una
       respuesta | Token obligatorio y mismo usuario (o admin).
