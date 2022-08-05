@@ -7,60 +7,65 @@ const cors = require("cors");
 require("dotenv").config();
 
 //* Controllers
-const {
-  newUsers,
-  validateUsers,
-  loginUsers,
-  userEdit,
-} = require("./controllers/users");
-const {
-  newQuestions,
-  getAllQuestions,
-  getQuestions,
-} = require("./controllers/questions");
+const { newUsers, validateUsers, loginUsers, userEdit } = require("./controllers/users");
+const { newQuestions, getAllQuestions, getQuestions, deleteQuestions } = require("./controllers/questions");
 const { newAnswers } = require("./controllers/answers/index");
 
-const app = express();
-
 //* Middlewares
-const { isUser, userExists, isExpert } = require("./Middlewares");
+const { isUser, userExists, isExpert } = require("./middlewares");
 
+
+const app = express();
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
 
+//* puerto desde el fichero de configuracion
 const { PORT } = process.env;
 
-app.listen(PORT, () => {
-  console.log(`Servidor activo en puerto ${PORT}`);
-});
+//& Endpoints Users
 
-//* Endpoints USers
-
+//* POST - /users/** - Crear el usuario
 app.post("/users", newUsers);
 
+//* POST - /users/validate/:RegistrationCode** - Validar el usuario
 app.get("/users/validate/:RegistrationCode", validateUsers);
 
+//* POST - /users/login** - Login de un usuario y devolverá el TOKEN
 app.post("/users/login/", loginUsers);
 
+//* PUT - /users/:id** - Editar un usuario | Token y Solo el propio usuario
 app.put("/users", isUser, userEdit);
 
-//* Endpoints Questions
+//& Endpoints Questions
 
-app.post("/questions", isUser, newQuestions);
-
-app.get("/questions/:id", getQuestions);
-
+//* GET - /questions** - Todass las entradas y buscar entradas | Sin token - questions?name=nombre&category=categoria&date=fecha&answer=true
 app.get("/questions", getAllQuestions);
 
-//* Endpoints Answers
+//* POST - /questions** - crea una entrada | Token obligatorio
+app.post("/questions", isUser, newQuestions);
 
+//* GET - /questions/:id** - JSON que muestra información de una entrada | Sin token
+app.get("/questions/:id", getQuestions);
+
+//* DELETE - /questions/:id** - borra una entrada | Token obligatorio y mismo usuario.
+app.delete("/questions/:id",isUser, deleteQuestions)
+
+
+//& Endpoints Answers
+
+//* POST - /answers** - crea una respuesta | Token obligatorio y solo si es especialista
 app.post("/answers", isUser, isExpert, newAnswers);
 
-//*errores
+//& Errores
 app.use((error, req, res, next) => {
   res.status(error.httpStatus || 500).send({
     status: "Error",
     message: error.message,
   });
+});
+
+
+app.listen(PORT, () => {
+  console.log(`Servidor activo en puerto ${PORT}`);
 });

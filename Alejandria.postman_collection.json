@@ -1,0 +1,314 @@
+{
+	"info": {
+		"_postman_id": "f7b6b2cd-7525-4bef-a41e-965155545ee4",
+		"name": "Alejandria",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "6575444"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "CreateUsers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"ale\",\n    \"email\": \"alatorraca.p@gmail.com\",\n    \"password\": \"123456789\",\n    \"userRole\": \"Expert\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								""
+							],
+							"query": [
+								{
+									"key": "pepe",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LoginUsers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"alatorraca.p@gmail.com\",\n    \"password\": \"123456789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/users/login/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"login",
+								""
+							],
+							"query": [
+								{
+									"key": "pepe",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editUser",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJTdHVkZW50IiwiaWF0IjoxNjU5NTQyMjY1LCJleHAiOjE2NTk2Mjg2NjV9.vJ1aHrc-aiGByJL-Bp1TG4_aouaAAO7lihATJIMwyMA",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"mario\",\n    \"email\": \"pit.uposada@gmail.com\",\n    \"password\": \"12345678\",\n    \"userRole\": \"Student\",\n    \"technology\": \"CSS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								""
+							],
+							"query": [
+								{
+									"key": "pepe",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ValidateUsers",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/users/validate/465723c13be63c83c5636d3f1feec7f565753d196ff567fcea",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"users",
+								"validate",
+								"465723c13be63c83c5636d3f1feec7f565753d196ff567fcea"
+							],
+							"query": [
+								{
+									"key": "RegistrationCode",
+									"value": "b068d123766b2771fea9f5148da5a418ec28bc5cd7cd8f39a6",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Questions",
+			"item": [
+				{
+					"name": "Get Questions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:3000/questions/?answered=1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"questions",
+								""
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "WHY",
+									"disabled": true
+								},
+								{
+									"key": "technology",
+									"value": "CSS",
+									"disabled": true
+								},
+								{
+									"key": "questionDate",
+									"value": "",
+									"disabled": true
+								},
+								{
+									"key": "answered",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "New Question",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbGUiOiJFeHBlcnQiLCJpYXQiOjE2NTk2MTIyODYsImV4cCI6MTY1OTY5ODY4Nn0.XDMOAQ_cSD41W6ouNNQS3rbZYMUsYxg8wRfGo7M83is",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"question\":\"porque si?\",\n    \"technology\":\"CSS\",\n    \"title\": \"not CSS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3000/questions",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "oneQuestion",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbGUiOiJFeHBlcnQiLCJpYXQiOjE2NTk2MTIyODYsImV4cCI6MTY1OTY5ODY4Nn0.XDMOAQ_cSD41W6ouNNQS3rbZYMUsYxg8wRfGo7M83is",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:3000/questions/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"questions",
+								"1"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Answers",
+			"item": [
+				{
+					"name": "NewAnswer",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbGUiOiJFeHBlcnQiLCJpYXQiOjE2NTk2MTIyODYsImV4cCI6MTY1OTY5ODY4Nn0.XDMOAQ_cSD41W6ouNNQS3rbZYMUsYxg8wRfGo7M83is",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"answer\": \"esto es una respuesta pregunta 1\",\r\n    \"question_id\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:3000/answers",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "3000",
+							"path": [
+								"answers"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

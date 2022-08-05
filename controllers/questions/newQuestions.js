@@ -15,9 +15,11 @@ const newQuestions = async (req, res, next) => {
 		
 		//* recogemos question, title y technology
 		const {question, title, technology} = req.body;
+		
 
 		// *recogemos el id desde el token
 		const {id} = req.userToken;
+		console.log('id', id)
 
 		//* Query
 		await connection.query(`

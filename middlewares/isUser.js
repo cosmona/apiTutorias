@@ -2,7 +2,6 @@
 
 const jwt = require('jsonwebtoken');
 
-const { generateError } = require('../helpers');
 const connectDB = require('../db/db');
 
 const isUser = async (req, res, next) => {
@@ -15,7 +14,6 @@ const isUser = async (req, res, next) => {
     connection = await connectDB();
 
     const { authorization } = req.headers;
-    console.log('authorization', authorization)
 
     // si no tengo Authorization salgo con un error
     if (!authorization) {
@@ -25,14 +23,16 @@ const isUser = async (req, res, next) => {
     }
 
     let tokenInfo;
-    try {
-      tokenInfo = jwt.verify(authorization, process.env.JWT_SECRET);
+    tokenInfo = jwt.verify(authorization, process.env.JWT_SECRET);
+    console.log('tokenInfo', tokenInfo)
+  /*  
+  try {
     } catch (error) {
       generateError('Token no valido', 401);
     }
 
     // comprobamos que el token sea valido respecto a lastAuthUpdate
-    /* const [user] = await connection.query(
+   const [user] = await connection.query(
       `
       SELECT lastAuthUpdate
       FROM users
