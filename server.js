@@ -9,7 +9,7 @@ require("dotenv").config();
 //* Controllers
 const { newUsers, validateUsers, loginUsers, userEdit } = require("./controllers/users");
 const { newQuestions, getAllQuestions, getQuestions, deleteQuestions } = require("./controllers/questions");
-const { newAnswers } = require("./controllers/answers/index");
+const { newAnswers, deleteAnswers } = require("./controllers/answers");
 
 //* Middlewares
 const { isUser, userExists, isExpert } = require("./middlewares");
@@ -56,6 +56,9 @@ app.delete("/questions/:id",isUser, deleteQuestions)
 
 //* POST - /answers** - crea una respuesta | Token obligatorio y solo si es especialista
 app.post("/answers", isUser, isExpert, newAnswers);
+
+//* DELETE - /answers/:id** - borra una respuesta | Token obligatorio y mismo usuario.
+app.delete("/answers/:id", isUser, deleteAnswers);
 
 //& Errores
 app.use((error, req, res, next) => {

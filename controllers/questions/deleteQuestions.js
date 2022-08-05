@@ -18,7 +18,17 @@ const deleteQuestions = async (req, res, next) => {
       const idUser = req.userToken.id;
       console.log('idUser', idUser)
 
+      //Borra tabla answers_votes asociada
+      await connection.query(`
+      DELETE FROM answer_votes WHERE Question_ID = ?;
+      `,[idQuestion]);
 
+      //Borra todas las respuestas asociadas
+      await connection.query(`
+      DELETE FROM answers WHERE Question_ID = ?;
+      `,[idQuestion]);
+
+      //Borra la pregunta
       const estate = await connection.query(`
       DELETE FROM questions WHERE User_ID = ? AND ID = ?;
       `,[idUser,idQuestion])
@@ -28,9 +38,14 @@ const deleteQuestions = async (req, res, next) => {
         throw error;
       }
       
+      //Control de errores - usuario id y pregunta id no coinciden
+      
+
+
+      
       res.send({
         status: 'ok',
-        message: 'Question borrada',
+        message: 'Preguntas y respuestas borradas',
       });
     } catch (error) {
       next(error);

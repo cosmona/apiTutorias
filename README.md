@@ -89,7 +89,7 @@ usuario admin.
 
 - [ ] ⭕️🔒️💀️ **PUT - /questions/:id** - edita una entrada | Token obligatorio y mismo usuario.
 
-- [ ] ⭕️🔒️💀️ **DELETE - /questions/:id** - borra una entrada | Token obligatorio y mismo usuario.
+- [X] ⭕️🔒️💀️ **DELETE - /questions/:id** - borra una entrada | Token obligatorio y mismo usuario.
 
 #### Bonus:
 
@@ -114,7 +114,7 @@ usuario admin.
 - [ ] ⭕️🔒️💀️ **PUT - /answers/:id** - edita una
       respuesta | Token obligatorio y mismo usuario.
 
-- [ ] ⭕️🔒️💀️ **DELETE - /answers/:id** - borra una respuesta | Token
+- [X] ⭕️🔒️💀️ **DELETE - /answers/:id** - borra una respuesta | Token
       obligatorio y mismo usuario.
 
 #### Bonus:
