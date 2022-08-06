@@ -10,4 +10,10 @@ async function validate(schema, data) {
     }
   }
 
-module.exports = {validate};
+async function generateErrors(message, code) {
+  const error = new Error(message);
+  error.httpStatus = code;
+  throw error;
+}
+
+module.exports = {validate, generateErrors};

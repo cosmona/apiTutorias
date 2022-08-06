@@ -77,11 +77,12 @@ async function main() {
 				ID INT PRIMARY KEY AUTO_INCREMENT,
 				Date DATETIME NOT NULL,
 				Vote TINYINT NOT NULL,
-				Question_ID INT NOT NULL,
-				FOREIGN KEY (Question_ID) REFERENCES questions(ID),
+				Answer_ID INT NOT NULL,
+				FOREIGN KEY (Answer_ID) REFERENCES answers(ID),
 				CHECK (Vote IN (1,2,3,4,5)),
 				User_ID INT NOT NULL,
-				FOREIGN KEY (User_ID) REFERENCES users(ID)
+				FOREIGN KEY (User_ID) REFERENCES users(ID),
+				UNIQUE(Answer_id,User_id)
 			);		
 		`);
 

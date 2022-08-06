@@ -10,19 +10,46 @@ const getAnswers = async (req, res, next) => {
   try {
     //* Conexion al DB
     connection = await connectDB();
+    const { id } =  req.params;
 
     //* Recuperar parametros 
-    const { title, technology, questionDate, answered } = req.query;
-    const [listQuestions] = await connection.query(consult);
+    const [answer] = await connection.query(
+      `
+      SELECT *
+      FROM  answers
+      WHERE id = ?
+      `, [id]);
 
-    //! Codigo aqui
+    //* agarrar los votos
+    const [answer_votes] = await connection.query(
+      `
+      SELECT * 
+      FROM answer_votes
+      WHERE Answer_ID = ?
+      `, [id]
+      ) 
+      
+      console.log('answer_votes', answer_votes)
+      
+      let total = 0;
+      for (const votes of answer_votes) {
+        
+        total += Number(votes.Vote);
+      }
+
+      const media = total/answer_votes.length;
+
 
     //* Devolvemos resultado
     res.send({
       status: "ok",
-      message: "Questions mostradas",
-      data: listQuestions,
+      message: "Respuesta mostradas",
+      data: answer,
+      votes: answer_votes,
+      Media: media,
     });
+
+
   } catch (error) {
     next(error);
   } finally {

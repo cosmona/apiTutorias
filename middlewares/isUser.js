@@ -6,6 +6,9 @@ const jwt = require('jsonwebtoken');
 //^ Importamos funcion que conecta a la BD
 const connectDB = require('../db/db');
 
+//^ Importa funcion que genera errores
+const {generateErrors} = require('../helpers');
+
 //& Comprueba token
 const isUser = async (req, res, next) => {
   let connection;
@@ -19,9 +22,10 @@ const isUser = async (req, res, next) => {
 
     //* si no tengo Authorization salgo con un error
     if (!authorization) {
-        const error = new Error("No estás autorizado");
-        error.httpStatus = 401;
-        throw error;
+      await generateErrors("Por favor iniciar sesion", 401);
+        // const error = new Error("No estás autorizado");
+        // error.httpStatus = 401;
+        // throw error;
     }
 
     //* verifica token

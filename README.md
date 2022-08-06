@@ -105,7 +105,7 @@ usuario admin.
 - [x] ⭕️🔒️ ****POST - /answers** - crea una respuesta | Token obligatorio y
       solo si es especialis**ta
 
-- [ ] ⭕️🔒️💀️ **POST - /answers/:id/votes** - vota una respuesta | Token
+- [x] ⭕️🔒️💀️ **POST - /answers/:id/votes** - vota una respuesta | Token
       obligatorio pero cada usuario solo puede votar una vez y las
       entradas no pueden ser votadas por el usuario que las creó.
 

@@ -9,7 +9,7 @@ require("dotenv").config();
 //* Controllers
 const { newUsers, validateUsers, loginUsers, userEdit } = require("./controllers/users");
 const { newQuestions, getAllQuestions, getQuestions,editQuestions, deleteQuestions } = require("./controllers/questions");
-const { newAnswers, deleteAnswers, editAnswers } = require("./controllers/answers");
+const { newAnswers, deleteAnswers, editAnswers, newVotes, getAnswers } = require("./controllers/answers");
 
 //* Middlewares
 const { isUser, userExists, isExpert } = require("./middlewares");
@@ -60,11 +60,19 @@ app.delete("/questions/:id",isUser, deleteQuestions)
 //* POST - /answers** - crea una respuesta | Token obligatorio y solo si es especialista
 app.post("/answers", isUser, isExpert, newAnswers);
 
+//* GET 
+app.get("/answers/:id", getAnswers);
+
 //* DELETE - /answers/:id** - borra una respuesta | Token obligatorio y mismo usuario.
 app.delete("/answers/:id", isUser, deleteAnswers);
 
 //* PUT - /answers/:id** - edita una respuesta | Token obligatorio y mismo usuario.
 app.put("/answers/:id", isUser,editAnswers)
+
+//* POST  /answers/:id/votes - vota una respuesta | Token obligatorio pero cada usuario solo puede votar una vez y las
+//*       entradas no pueden ser votadas por el usuario que las creó.
+
+app.post("/answers/:id/votes", isUser, newVotes);
 
 //& Errores
 app.use((error, req, res, next) => {

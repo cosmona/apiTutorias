@@ -3,6 +3,9 @@
 //^ Importamos funcion que conecta a la BD
 const connectDB = require('../../db/db');
 
+//^ Importa funcion que genera errores
+const generateErrors = require('../../helpers');
+
 //& Edita una respuesta
 const editAnswers = async (req, res, next) => {
     let connection;   
@@ -24,9 +27,10 @@ const editAnswers = async (req, res, next) => {
 
     //* si no existe la respuesta
     if(estate[0].affectedRows === 0){
-      const error = new Error("No existe la respuesta");
-      error.httpStatus = 409;
-      throw error;
+      generateErrors("No existe la respuesta", 409)
+      // const error = new Error("No existe la respuesta");
+      // error.httpStatus = 409;
+      // throw error;
     }
 
     //* Devolvemos resultado
