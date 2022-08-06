@@ -1,10 +1,13 @@
 "use strict";
-
+//^ npm import
 const mySql = require("mysql2/promise");
 
+//* Valores del fichero . env
 const { MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE } = process.env;
 
 let connectPool;
+
+//& Conecta pool con la DB
 async function connectDB() {
   if (!connectPool) {
     connectPool = mySql.createPool({

@@ -1,29 +1,20 @@
 'use strict';
 
+//^ Importamos funcion que conecta a la BD
 const connectDB = require('../../db/db');
 
+//& Edita un usuario
 const userEdit = async (req, res, next) => {
     let connection;
-    console.log('userEdit', userEdit)
     
     try {
-        // pedir connection al DB
-        connection = await connectDB();
+      //* Conexion al DB
+      connection = await connectDB();
   
-      // Sacar id de req.params
-    //const { id } = req.params; // este es el id de usuario que queremos editar
+      //* Sacar id de req.params
+      const { username, email, userRole, technology } = req.body;
 
-    // Sacar name y email de req.body
-    const { username, email, userRole, technology } = req.body;
-
-    // Comprobar que el usuario que queremos editar es el mismo del token
-    /* if (req.userToken.id !== Number(id)) {
-      const error = new Error('No tienes permisos para editar este usuario');
-      error.httpStatus = 403;
-      throw error;
-    } */
-
-    // Modioficar la información actual del usuario en la base de datos
+      //~ Consulta SQL - Modificar la información actual del usuario en la base de datos
     let consult =`UPDATE users SET `;
     if(email){        
         consult += `Email="${email}"`;
@@ -37,20 +28,21 @@ const userEdit = async (req, res, next) => {
     if(technology){
         consult += `,technology="${technology}"`;
     }
+
     consult += ` WHERE ID = ${req.userToken.id}`;
 
     const [currentUser] = await connection.query(consult);
-    //console.log('currentUser', currentUser);
-  
-      res.send({
-        
+    
+    //* Devuelve resultado
+    res.send({
         status: 'ok',
         message: 'Usuario modificado',
-      });
-    } catch (error) {
+    });
+  } catch (error) {
       next(error);
-    } finally {
-      if (connection) connection.release();
+  } finally {
+    //* Finaliza la conexion
+    if (connection) connection.release();
     }
   };
   

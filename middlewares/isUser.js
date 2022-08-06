@@ -1,28 +1,32 @@
 'use strict';
 
+//^npm import
 const jwt = require('jsonwebtoken');
 
+//^ Importamos funcion que conecta a la BD
 const connectDB = require('../db/db');
 
+//& Comprueba token
 const isUser = async (req, res, next) => {
   let connection;
 
-  console.log('Ompa isUser', );
-
   try {
-    // pido conneción al DB
+    //* Conecta a la DB
     connection = await connectDB();
 
+    //* recoje parametros
     const { authorization } = req.headers;
 
-    // si no tengo Authorization salgo con un error
+    //* si no tengo Authorization salgo con un error
     if (!authorization) {
         const error = new Error("No estás autorizado");
         error.httpStatus = 401;
         throw error;
     }
 
+    //* verifica token
     let tokenInfo;
+
     tokenInfo = jwt.verify(authorization, process.env.JWT_SECRET);
     console.log('tokenInfo', tokenInfo)
   /*  
@@ -57,6 +61,7 @@ const isUser = async (req, res, next) => {
     //throw error;
     next(error);
   } finally {
+    //* finaliza la conexion
     if (connection) connection.release();
   }
 };
