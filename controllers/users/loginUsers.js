@@ -6,8 +6,8 @@ const jwt = require("jsonwebtoken");
 //^ Importamos funcion que conecta a la BD
 const connectDB = require("../../db/db");
 
-//^ Importamos funcion validate y schema que comprueba los datos
-const { validate } = require("../../helpers");
+//^ Importamos funcion validate - genera errores y schema que comprueba los datos
+const { validate, generateErrors } = require("../../helpers");
 const { registrationSchema } = require("../../schemas");
 
 //& Login de usuario
@@ -23,7 +23,7 @@ const loginUsers = async (req, res, next) => {
 
     //* Recojemos parametros de req.body el email y la password
     const { email, password } = req.body;
-
+    
     //~ Consulta SQL - selecionamos el usuario con este email y password
     const [user] = await connection.query(
       `
@@ -33,19 +33,14 @@ const loginUsers = async (req, res, next) => {
     `,
       [email, password]
     );
-    //TODO los dos errore en un if?
-    //* si no encuentro el usuario salgo con error
+    //! si no encuentro el usuario salgo con error
     if (user.length === 0) {
-      const error = new Error("Email o password incorrecto");
-      error.httpStatus = 401;
-      throw error;
+     await generateErrors("Email o password incorrecto", 401)
     }
-
-    //* comprobar que el usuario sea activo
+    
+    //! comprobar que el usuario sea activo
     if (!user[0].Activation) {
-      const error = new Error("El usuario no está activado");
-      error.httpStatus = 401;
-      throw error;
+     await generateErrors("El usuario no está activado", 401)
     }
 
     //* creo objeto con los datos que quiero guardar en el token

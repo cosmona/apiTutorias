@@ -3,6 +3,9 @@
 //^ Importamos funcion que conecta a la BD
 const getDB = require('../../db/db');
 
+//^ Importamos funcion validate - genera errores y schema que comprueba los datos
+const { generateErrors } = require("../../helpers");
+
 //& Valida Usuario
 const validateUsers = async (req, res, next) => {
     let connection;
@@ -25,13 +28,9 @@ const validateUsers = async (req, res, next) => {
         );
 
         
-      //*si no existe el codigo de validacin
+      //!si no existe el codigo de validacion
       if (user.length === 0) {
-        const error = new Error(
-          'Ningun usuario encontrado con este código de validación'
-        );
-        error.httpStatus = 404;
-        throw error;
+       await generateErrors("Ningun usuario encontrado con este código de validación", 404);
       }
   
       //* activamos el usuario y borramos RegistrationCode
