@@ -9,6 +9,9 @@ const crypto = require("crypto");
 //^ Importamos funcion que conecta a la BD
 const connectDB = require("../../db/db");
 
+//^ Importamos funcion validate - genera errores y schema que comprueba los datos
+const { validate, generateErrors } = require("../../helpers");
+const { registrationSchema } = require("../../schemas");
 
 //* coge el secreto de la api de sengrid y lo aplica
 verEmail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -27,6 +30,14 @@ const newUsers = async (req, res, next) => {
     //* Recuperamos parametros 
     const { username, email, password, userRole, Technology } = req.body;    
 
+    const valida = {
+      "email":req.body.email,
+      "password":req.body.password
+  }
+
+    //! validacion de los datos del body
+    await validate(registrationSchema, valida);
+
     //~ Consulta SQL - Consultar DB para ver si el usuario existe
     const [users] = await connection.query(
       `SELECT * FROM users
@@ -35,11 +46,9 @@ const newUsers = async (req, res, next) => {
       [email]
     );
     
-    //* si existe, da error
+    //! si existe, da error
     if (users.length !== 0) {
-      const error = new Error("Este email ya esta en uso");
-      error.httpStatus = 409;
-      throw error;
+      await generateErrors('Este email ya esta en uso', 409);
     }
   
     //* si no existe, crea el usuario en la DB inactivo y el codigo unico
@@ -69,7 +78,7 @@ const newUsers = async (req, res, next) => {
     );
     let cuerpo = `Bienvenido a Alejandria, por favor verifique su correo <a href="http://127.0.0.1:3000/users/validate/${RegistrationCode}">aqui!</a>`;
     let subject = "Correo de verificación Alejandria";
-
+  
     //* envia correo de validacion
     const msg = {
       to: email,
@@ -82,9 +91,12 @@ const newUsers = async (req, res, next) => {
         </div>`,
     };
 
-    await verEmail.send(msg);
-
-    //TODO validacion de correo y pass
+    try {
+      await verEmail.send(msg);
+    } catch (error) {
+      //! Error generico en sendgrid
+     await generateErrors("Error al enviar el correo", 409)
+    }
 
     //* Devolvemos resultado
     res.status(201).send({

@@ -1,22 +1,23 @@
 {
 	"info": {
-		"_postman_id": "f7b6b2cd-7525-4bef-a41e-965155545ee4",
+		"_postman_id": "611b8f0d-9e2d-476b-93d2-05be406342e0",
 		"name": "Alejandria",
+		"description": "# TUTORÍAS CON EXPERTOS\n\nDESCRIPCIÓN  \nPlataforma donde estudiantes de programación realizan consultas concretas a expertos en cada  \ntecnología. Las preguntas están disponibles para todos los usuarios, las respuestas sólo para los  \nusuarios registrados.\n\nUSUARIO ANÓNIMO# TUTORÍAS CON EXPERTOS\n\n## DESCRIPCIÓN\n\nPlataforma donde estudiantes de programación realizan consultas concretas a expertos en cada tecnología. Las preguntas están disponibles para todos los usuarios, las respuestas sólo para los usuarios registrados.\n\n*USUARIO ANÓNIMO*\n\n*   Visualizar la landing\n    *   Búsqueda por:\n        *   Nombre\n        *   Tipo de tecnología/lenguaje\n        *   Fecha de la consulta\n        *   Tiene respuesta (o no)\n*   Login\n*   Registro (le llega email de registro), se registra como estudiante o como experto en una  \n    tecnología/lenguaje.\n    \n\n*USUARIOS REGISTRADOS*\n\n(hacen preguntas nuevas, responden o visualizan las respuestas):\n\n*   Visualizar la landing\n    *   Búsqueda por:\n        *   Nombre\n        *   Tipo de tecnología/lenguaje\n        *   Fecha de la consulta\n        *   Tiene respuesta (o no)\n*   Gestión del perfil (cambio de datos)\n*   Enviar la consulta (etiquetando el lenguaje/tecnología) y un usuario experto en esa  \n    tecnología/lenguaje puede enviar una respuesta.\n*   Rating de respuestas (después de que contesten). Todos los usuarios pueden dejar un  \n    rating de una respuesta.\n    \n\nBonus funcionalidades:  \nusuario admin.\n\n## ENDPOINTS\n\n### USERS\n\n⭕️🔒️💀️ **POST - /users/** - Crear el usuario\n\n⭕️🔒️💀️ **POST - /users/validate/:RegistrationCode** - Validar el usuario\n\n⭕️ **POST - /users/login** - Hará el login de un usuario y devolverá el TOKEN  \n⭕️🔒️💀️ **PUT - /users/:id** - Editar un usuario | Token y Solo el propio usuario  \n⭕️🔒️💀️ **DELETE - /users/:id/** - borra un usuario | Token obligatorio y mismo usuario\n\n### QUESTIONS\n\n*   ⭕️ **GET - /questions** - JSON con lista todas las entradas y buscar entradas | Sin token - GET - /questions?name=nombre&category=categoria&date=fecha&answer=true\n*   ⭕️ **GET - /questions/:id** - JSON que muestra información de una entrada | Sin token\n*   ⭕️🔒️ **POST - /questions** - crea una entrada | Token obligatorio\n*   ⭕️🔒️💀️ **PUT - /questions/:id** - edita una entrada | Token obligatorio y mismo usuario.\n*   ⭕️🔒️💀️ **DELETE - /questions/:id** - borra una entrada | Token obligatorio y mismo usuario.\n    \n\n### ANSWERS\n\n*   solo si es especialis**ta\n*   entradas no pueden ser votadas por el usuario que las creó.\n*   ⭕️🔒️💀️ **PUT - /answers/:id** - edita una respuesta | Token obligatorio y mismo usuario.\n*   ⭕️🔒️💀️ **DELETE - /answers/:id** - borra una respuesta | Tokenobligatorio y mismo usuario.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "6575444"
+		"_exporter_id": "6541337"
 	},
 	"item": [
 		{
 			"name": "Users",
 			"item": [
 				{
-					"name": "CreateUsers",
+					"name": "newUsers",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"ale\",\n    \"email\": \"alatorraca.p@gmail.com\",\n    \"password\": \"123456789\",\n    \"userRole\": \"Expert\"\n}",
+							"raw": "{\n    \"username\": \"ale\",\n    \"email\": \"inakip.f@gmail.com\",\n    \"password\": \"123456789\",\n    \"userRole\": \"Expert\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -24,34 +25,41 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/users/",
+							"raw": "localhost:{{port}}/users/",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "{{port}}",
 							"path": [
 								"users",
 								""
-							],
-							"query": [
-								{
-									"key": "pepe",
-									"value": "",
-									"disabled": true
-								}
 							]
-						}
+						},
+						"description": "//* POST - /users/** - Crear el usuario\n\napp.post(\"/users\", newUsers);"
 					},
 					"response": []
 				},
 				{
-					"name": "LoginUsers",
+					"name": "loginUsers",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();",
+									"pm.globals.set(\"token\", jsonData.data.token);",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"alatorraca.p@gmail.com\",\n    \"password\": \"123456789\"\n}",
+							"raw": "{\n    \"email\": \"inakip.f@gmail.com\",\n    \"password\": \"123456789\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -59,22 +67,15 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/users/login/",
+							"raw": "localhost:{{port}}/users/login/",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "{{port}}",
 							"path": [
 								"users",
 								"login",
 								""
-							],
-							"query": [
-								{
-									"key": "pepe",
-									"value": "",
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -82,18 +83,29 @@
 				},
 				{
 					"name": "editUser",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
 					"request": {
 						"method": "PUT",
 						"header": [
 							{
 								"key": "authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsInJvbGUiOiJTdHVkZW50IiwiaWF0IjoxNjU5NTQyMjY1LCJleHAiOjE2NTk2Mjg2NjV9.vJ1aHrc-aiGByJL-Bp1TG4_aouaAAO7lihATJIMwyMA",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"mario\",\n    \"email\": \"pit.uposada@gmail.com\",\n    \"password\": \"12345678\",\n    \"userRole\": \"Student\",\n    \"technology\": \"CSS\"\n}",
+							"raw": "{\n    \"username\": \"mario\",\n    \"email\": \"inakip.f@gmail.com\",\n    \"password\": \"12345678\",\n    \"userRole\": \"Student\",\n    \"technology\": \"CSS\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -101,11 +113,11 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/users/",
+							"raw": "localhost:{{port}}/users/",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "{{port}}",
 							"path": [
 								"users",
 								""
@@ -122,27 +134,52 @@
 					"response": []
 				},
 				{
-					"name": "ValidateUsers",
+					"name": "userDelete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:{{port}}/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"users",
+								""
+							],
+							"query": [
+								{
+									"key": "pepe",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "validateUsers",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/users/validate/465723c13be63c83c5636d3f1feec7f565753d196ff567fcea",
+							"raw": "localhost:{{port}}/users/validate/465723c13be63c83c5636d3f1feec7f565753d196ff567fcea",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "{{port}}",
 							"path": [
 								"users",
 								"validate",
 								"465723c13be63c83c5636d3f1feec7f565753d196ff567fcea"
-							],
-							"query": [
-								{
-									"key": "RegistrationCode",
-									"value": "b068d123766b2771fea9f5148da5a418ec28bc5cd7cd8f39a6",
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -154,20 +191,57 @@
 			"name": "Questions",
 			"item": [
 				{
-					"name": "Get Questions",
+					"name": "editQuestions",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"mario\",\n    \"question\": \"nueva pregunta\",\n    \"technology\": \"CSS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:{{port}}/questions/1",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"questions",
+								"1"
+							],
+							"query": [
+								{
+									"key": "pepe",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getQuestions",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://127.0.0.1:3000/questions/?answered=1",
-							"protocol": "http",
+							"raw": "localhost:{{port}}/questions/?technology=CSS",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"localhost"
 							],
-							"port": "3000",
+							"port": "{{port}}",
 							"path": [
 								"questions",
 								""
@@ -180,8 +254,7 @@
 								},
 								{
 									"key": "technology",
-									"value": "CSS",
-									"disabled": true
+									"value": "CSS"
 								},
 								{
 									"key": "questionDate",
@@ -190,7 +263,8 @@
 								},
 								{
 									"key": "answered",
-									"value": "1"
+									"value": "1",
+									"disabled": true
 								}
 							]
 						}
@@ -198,13 +272,13 @@
 					"response": []
 				},
 				{
-					"name": "New Question",
+					"name": "newQuestions",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbGUiOiJFeHBlcnQiLCJpYXQiOjE2NTk2MTIyODYsImV4cCI6MTY1OTY5ODY4Nn0.XDMOAQ_cSD41W6ouNNQS3rbZYMUsYxg8wRfGo7M83is",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -218,17 +292,38 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3000/questions",
-							"protocol": "http",
+							"raw": "localhost:{{port}}/questions",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"localhost"
 							],
-							"port": "3000",
+							"port": "{{port}}",
 							"path": [
 								"questions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Question",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:{{port}}/questions/4",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"questions",
+								"4"
 							]
 						}
 					},
@@ -272,13 +367,98 @@
 			"name": "Answers",
 			"item": [
 				{
-					"name": "NewAnswer",
+					"name": "editAnswers",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"answer\": \"mario\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:{{port}}/answers/2",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"answers",
+								"2"
+							],
+							"query": [
+								{
+									"key": "pepe",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getAnswers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"answer\": \"mario\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:{{port}}/answers/2",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"answers",
+								"2"
+							],
+							"query": [
+								{
+									"key": "pepe",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "newAnswers",
 					"request": {
 						"method": "POST",
 						"header": [
 							{
 								"key": "authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbGUiOiJFeHBlcnQiLCJpYXQiOjE2NTk2MTIyODYsImV4cCI6MTY1OTY5ODY4Nn0.XDMOAQ_cSD41W6ouNNQS3rbZYMUsYxg8wRfGo7M83is",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
@@ -292,15 +472,11 @@
 							}
 						},
 						"url": {
-							"raw": "http://127.0.0.1:3000/answers",
-							"protocol": "http",
+							"raw": "localhost:{{port}}/answers",
 							"host": [
-								"127",
-								"0",
-								"0",
-								"1"
+								"localhost"
 							],
-							"port": "3000",
+							"port": "{{port}}",
 							"path": [
 								"answers"
 							]

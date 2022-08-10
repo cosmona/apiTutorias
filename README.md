@@ -63,9 +63,9 @@ usuario admin.
 - [x] ⭕️🔒️💀️ **PUT - /users/:id** - Editar un usuario | Token y Solo el
       propio usuario
 
+- [x] ⭕️🔒️💀️ **DELETE - /users/:id/** - borra un usuario | Token obligatorio y mismo usuario
 #### Bonus:
 
-- [ ] ⭕️🔒️💀️ **DELETE - /users/:id/** - borra un usuario | Token obligatorio y mismo usuario
   
 - [ ] ⭕️🔒️💀️ **PUT - /users/:id/password** - Editar la contraseña de un usuario | Solo el propio usuario
 

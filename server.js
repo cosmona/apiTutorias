@@ -7,7 +7,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 //* Controllers
-const { newUsers, validateUsers, loginUsers, userEdit } = require("./controllers/users");
+const { newUsers, validateUsers, loginUsers, userEdit, userDelete } = require("./controllers/users");
 const { newQuestions, getAllQuestions, getQuestions,editQuestions, deleteQuestions } = require("./controllers/questions");
 const { newAnswers, deleteAnswers, editAnswers, newVotes, getAnswers } = require("./controllers/answers");
 
@@ -37,9 +37,12 @@ app.post("/users/login/", loginUsers);
 //* PUT - /users/:id** - Editar un usuario | Token y Solo el propio usuario
 app.put("/users", isUser, userEdit);
 
+//* DELETE - /users/:id/** - borra un usuario | Token obligatorio y mismo usuario
+app.delete("/users", isUser, userDelete);
+
 //& Endpoints Questions
 
-//* GET - /questions** - Todass las entradas y buscar entradas | Sin token - questions?name=nombre&category=categoria&date=fecha&answer=true
+//* GET - /questions** - Todas las entradas y buscar entradas | Sin token - questions?name=nombre&category=categoria&date=fecha&answer=true
 app.get("/questions", getAllQuestions);
 
 //* POST - /questions** - crea una entrada | Token obligatorio
