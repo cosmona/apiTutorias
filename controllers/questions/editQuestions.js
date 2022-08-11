@@ -3,6 +3,9 @@
 //^ Importamos funcion que conecta a la BD
 const connectDB = require('../../db/db');
 
+//^ Importa funcion de errores
+const { generateErrors } = require('../../helpers');
+
 //& Edita una pregunta
 const editQuestions = async (req, res, next) => {
     let connection;    
@@ -20,16 +23,28 @@ const editQuestions = async (req, res, next) => {
           consult += ` title = "${title}"`;
       }
       if(question){
-          consult += `, question="${question}"`;
+        if(title){
+          consult += `, `
+        }
+          consult += ` question="${question}"`;
       }
       if(technology){
-          consult += `, technology="${technology}"`;
+        if(title || question){
+          consult += `, `
+        }
+          consult += ` technology="${technology}"`;
       }
       consult += ` WHERE ID = ${idQuestion} AND User_ID= ${req.userToken.id};`;
       
       //~ Ejecuta consulta SQL
       const [currentUser] = await connection.query(consult);
+      console.log('currentUser', currentUser)
       
+      //*Error
+      if(currentUser.affectedRows === 0){
+        await generateErrors("No se ha encontrado esta pregunta", 409)
+      }
+
       //* Devolvemos resultado
       res.send({
         status: 'ok',
