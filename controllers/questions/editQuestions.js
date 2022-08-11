@@ -40,7 +40,8 @@ const editQuestions = async (req, res, next) => {
       const [currentUser] = await connection.query(consult);
       console.log('currentUser', currentUser)
       
-      //*Error
+      //! Error
+      //TODO si el usuario que quiere modificar no es el creador de la pregunta se va por aqui
       if(currentUser.affectedRows === 0){
         await generateErrors("No se ha encontrado esta pregunta", 409)
       }

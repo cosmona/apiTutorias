@@ -59,6 +59,8 @@ const loginUsers = async (req, res, next) => {
       message: "Usuario logeado",
       data: {
         token,
+        email,
+        info
       },
     });
   } catch (error) {
