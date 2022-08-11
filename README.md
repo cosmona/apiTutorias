@@ -64,6 +64,8 @@ usuario admin.
       propio usuario
 
 - [x] ⭕️🔒️💀️ **DELETE - /users/:id/** - borra un usuario | Token obligatorio y mismo usuario
+
+- [x] ⭕️🔒️💀️ **get /users/** - mostrar usuario | Token y Solo el propio usuario (+ o - datos)
 #### Bonus:
 
   
@@ -77,7 +79,6 @@ usuario admin.
 
 - [ ] ⭕️🔒️💀️ **POST /users/reset-password**
 
-- [ ] ⭕️🔒️💀️ **get /users/** - mostrar usuario
 
 ### QUESTIONS
 
