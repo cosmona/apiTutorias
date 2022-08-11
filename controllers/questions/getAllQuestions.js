@@ -3,6 +3,9 @@
 //^ Importamos funcion que conecta a la BD
 const connectDB = require('../../db/db');
 
+//^ Importa funcion de errores
+const { generateErrors } = require('../../helpers');
+
 //& Muestra todas las preguntas
 const getAllQuestions = async (req, res, next) => {
     let connection;
@@ -46,7 +49,12 @@ const getAllQuestions = async (req, res, next) => {
       
       //~ ejecuta SQL
       const [listQuestions] = await connection.query(consult);
-  
+
+      //* error
+      if(listQuestions.length === 0){
+        await generateErrors("No hay preguntas por mostrar", 409)
+      }
+       
       //* Devolvemos resultado
       res.send({
         status: 'ok',

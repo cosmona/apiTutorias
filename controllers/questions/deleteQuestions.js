@@ -32,9 +32,7 @@ const deleteQuestions = async (req, res, next) => {
 
       //* Si no exite la pregunta
       if(estate[0].affectedRows === 0){
-        const error = new Error("No existe la pregunta");
-        error.httpStatus = 409;
-        throw error;
+        generateErrors("No existe la pregunta", 409)
       }
       
       //? Control de errores - usuario id y pregunta id no coinciden
