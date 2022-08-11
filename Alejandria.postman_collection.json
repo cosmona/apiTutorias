@@ -184,6 +184,38 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "viewUsers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:{{port}}/users/2",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"users",
+								"2"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -336,16 +368,16 @@
 						"header": [
 							{
 								"key": "authorization",
-								"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTUsInJvbGUiOiJFeHBlcnQiLCJpYXQiOjE2NTk2MTIyODYsImV4cCI6MTY1OTY5ODY4Nn0.XDMOAQ_cSD41W6ouNNQS3rbZYMUsYxg8wRfGo7M83is",
+								"value": "{{token}}",
 								"type": "text"
 							}
 						],
 						"url": {
-							"raw": "localhost:3000/questions/1",
+							"raw": "localhost:{{port}}/questions/1",
 							"host": [
 								"localhost"
 							],
-							"port": "3000",
+							"port": "{{port}}",
 							"path": [
 								"questions",
 								"1"

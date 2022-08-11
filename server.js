@@ -7,7 +7,7 @@ const cors = require("cors");
 require("dotenv").config();
 
 //* Controllers
-const { newUsers, validateUsers, loginUsers, userEdit, userDelete } = require("./controllers/users");
+const { newUsers, validateUsers, loginUsers, userEdit, userDelete, viewUsers } = require("./controllers/users");
 const { newQuestions, getAllQuestions, getQuestions,editQuestions, deleteQuestions } = require("./controllers/questions");
 const { newAnswers, deleteAnswers, editAnswers, newVotes, getAnswers } = require("./controllers/answers");
 
@@ -24,6 +24,8 @@ app.use(express.json());
 const { PORT } = process.env;
 
 //& Endpoints Users
+//* GET - /users/** - mostrar usuario | Token y Solo el propio usuario (+ o - datos)
+app.get("/users/:id", isUser, viewUsers)
 
 //* POST - /users/** - Crear el usuario
 app.post("/users", newUsers);
