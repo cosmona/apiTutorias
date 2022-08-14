@@ -3,6 +3,9 @@
 //^ Importamos funcion que conecta a la BD
 const connectDB = require('../../db/db');
 
+//^ Importa funcion de errores
+const { generateErrors } = require('../../helpers');
+
 //& Borra una pregunta
 const deleteQuestions = async (req, res, next) => {
     let connection;
@@ -32,7 +35,7 @@ const deleteQuestions = async (req, res, next) => {
 
       //* Si no exite la pregunta
       if(estate[0].affectedRows === 0){
-        generateErrors("No existe la pregunta", 409)
+        await generateErrors("No existe la pregunta", 409)
       }
       
       //? Control de errores - usuario id y pregunta id no coinciden

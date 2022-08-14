@@ -22,15 +22,16 @@ const newQuestions = async (req, res, next) => {
 		const {id} = req.userToken;
 
 	    //~ Consulta SQL
-		await connection.query(`
-			INSERT INTO questions (questiondate, title, question, user_id, technology) 
-			VALUES (?,?,?,?,?) 
+		const result = await connection.query(`
+    INSERT INTO questions (questiondate, title, question, user_id, technology) 
+    VALUES (?,?,?,?,?) 
 		`,[creationDate, title, question,id,technology]);
-
+    
     //* Devolvemos resultado
       res.send({
         status: 'ok',
         message: 'Question creada',
+        questionID: result[0].insertId
       });
     } catch (error) {
       next(error);
