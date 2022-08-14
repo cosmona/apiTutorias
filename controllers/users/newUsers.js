@@ -1,6 +1,5 @@
 "use strict";
 
-// require("dotenv").config(); //!IMPORTANTE AQUI (NO IDEA de que necesitaba esto)
 //^ npm import
 const { format } = require("date-fns");
 const verEmail = require("@sendgrid/mail");
@@ -35,7 +34,7 @@ const newUsers = async (req, res, next) => {
       "password":req.body.password
   }
 
-    //! validacion de los datos del body
+    //* validacion de los datos del body
     await validate(registrationSchema, valida);
 
     //~ Consulta SQL - Consultar DB para ver si el usuario existe

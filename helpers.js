@@ -1,6 +1,6 @@
 'use strict';
 
-
+//& Validar usuario
 async function validate(schema, data) {
     try {
       await schema.validateAsync(data);
@@ -10,6 +10,7 @@ async function validate(schema, data) {
     }
   }
 
+//& Función de errores
 async function generateErrors(message, code) {
   const error = new Error(message);
   error.httpStatus = code;

@@ -33,9 +33,9 @@ const newVotes = async (req, res, next) => {
       );
       console.log('answer', answer)
       
-    //* si no existe la pregunta 
+    //* si no existe la respuesta 
     if (answer.length === 0) {
-      await generateErrors("No puedes votar esta respuesta", 409);
+      await generateErrors("No existe la respuesta", 409);
     }
 
 

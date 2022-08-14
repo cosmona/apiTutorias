@@ -17,11 +17,22 @@ const deleteQuestions = async (req, res, next) => {
       //*recuperar parametros
       const idQuestion = req.params.id;
       const idUser = req.userToken.id;
-
+      
+      //~ Consulta SQL - Comparación de ID
+      const userID = await connection.query(`
+      SELECT User_ID FROM questions WHERE ID = ?;
+      `,[idQuestion]);
+      
+      //! Control de errores - usuario id y pregunta id no coinciden
+      if(idUser !== userID[0][0].User_ID){
+        await generateErrors("No puedes borrar esta pregunta", 409)
+      }
+      
       //~ Consulta SQL - Borra los votos
       await connection.query(`
-        DELETE FROM answer_votes WHERE Question_ID = ?;
+      DELETE FROM answer_votes WHERE Answer_ID = ?;
       `,[idQuestion]);
+      
 
       //~ Consulta SQL - Borra todas las respuestas asociadas
       await connection.query(`
@@ -33,12 +44,10 @@ const deleteQuestions = async (req, res, next) => {
         DELETE FROM questions WHERE User_ID = ? AND ID = ?;
       `,[idUser,idQuestion])
 
-      //* Si no exite la pregunta
+      //! Si no exite la pregunta
       if(estate[0].affectedRows === 0){
         await generateErrors("No existe la pregunta", 409)
       }
-      
-      //? Control de errores - usuario id y pregunta id no coinciden
       
       //* Devolvemos resultados
       res.send({

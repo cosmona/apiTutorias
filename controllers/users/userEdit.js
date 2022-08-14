@@ -22,7 +22,7 @@ const userEdit = async (req, res, next) => {
             "password":req.body.password
         }
 
-        //! validacion de los datos del body faltan userRole y technology
+        //* validacion de los datos del body faltan userRole y technology
          await validate(registrationSchema, valida);
 
         //* Sacar id de req.body

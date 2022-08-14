@@ -12,10 +12,11 @@ const { newQuestions, getAllQuestions, getQuestions,editQuestions, deleteQuestio
 const { newAnswers, deleteAnswers, editAnswers, newVotes, getAnswers } = require("./controllers/answers");
 
 //* Middlewares
-const { isUser, userExists, isExpert } = require("./middlewares");
+const { isUser, isExpert } = require("./middlewares");
 
 
 const app = express();
+
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.json());
@@ -79,7 +80,7 @@ app.put("/answers/:id", isUser,editAnswers)
 
 app.post("/answers/:id/votes", isUser, newVotes);
 
-//& Errores
+//& Error genérico
 app.use((error, req, res, next) => {
   res.status(error.httpStatus || 500).send({
     status: "Error",
@@ -88,6 +89,7 @@ app.use((error, req, res, next) => {
 });
 
 
+//& Puerto en escucha
 app.listen(PORT, () => {
   console.log(`Servidor activo en puerto ${PORT}`);
 });

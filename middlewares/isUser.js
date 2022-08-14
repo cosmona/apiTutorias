@@ -20,12 +20,9 @@ const isUser = async (req, res, next) => {
     //* recoje parametros
     const { authorization } = req.headers;
 
-    //* si no tengo Authorization salgo con un error
+    //! si no tengo Authorization salgo con un error
     if (!authorization) {
-      await generateErrors("Por favor iniciar sesion", 401);
-        // const error = new Error("No estás autorizado");
-        // error.httpStatus = 401;
-        // throw error;
+      await generateErrors("Por favor inicie sesion", 401);
     }
 
     //* verifica token
@@ -33,38 +30,14 @@ const isUser = async (req, res, next) => {
 
     tokenInfo = jwt.verify(authorization, process.env.JWT_SECRET);
     console.log('tokenInfo', tokenInfo)
-  /*  
-  try {
-    } catch (error) {
-      generateError('Token no valido', 401);
-    }
-
-    // comprobamos que el token sea valido respecto a lastAuthUpdate
-   const [user] = await connection.query(
-      `
-      SELECT lastAuthUpdate
-      FROM users
-      WHERE id=?
-      `,
-      [tokenInfo.id]
-    );
-
-    const lastAuthUpdate = new Date(user[0].lastAuthUpdate);
-    const timestampCreateToken = new Date(tokenInfo.iat * 1000);
-
-    if (timestampCreateToken < lastAuthUpdate) {
-      generateError('Token caducado', 401);
-    } */
-
-    // añadimos en la request (req) el tokenInfo
+  
+    //* añadimos en la request (req) el tokenInfo
     req.userToken = tokenInfo;
 
-    // continuo
     next();
-  } catch (error) {
-    //throw error;
+    } catch (error) {
     next(error);
-  } finally {
+    } finally {
     //* finaliza la conexion
     if (connection) connection.release();
   }

@@ -3,6 +3,9 @@
 //^ Importamos funcion que conecta a la BD
 const connectDB = require("../../db/db");
 
+//^ Importamos funcion validate - genera errores y schema que comprueba los datos
+const { generateErrors } = require("../../helpers");
+
 //& Muestra una pregunta
 const viewUsers = async (req, res, next) => {
   let connection;
@@ -15,32 +18,35 @@ const viewUsers = async (req, res, next) => {
     const { id } = req.params;
     const myId = req.userToken.id;
 
-    let question;
+    let result;
   
     //* si es el propio usuario enseña mas o menos datos
     if (id == myId){
       //~ Consulta SQL de una pregunta por id
-      question = await connection.query(`
+      result = await connection.query(`
       SELECT * FROM users
       WHERE id = ?;
       `,[id]);
     } else {
-        //~ Consulta SQL de una pregunta por id
-        question = await connection.query(`
-        SELECT Username, UserRole, Technology FROM users
-        WHERE id = ?;
-        `,[id]);
+      //~ Consulta SQL de una pregunta por id
+      result = await connection.query(`
+      SELECT Username, UserRole, Technology FROM users
+      WHERE id = ?;
+      `,[id]);
     }
-
     
-
+    //! no existe el usuario
+    if(result[0].length === 0){
+      await generateErrors ("Usuario no encontrado", 409)
+    }
+    
 
     //* Devolvemos resultado
     res.send({
       status: "ok",
       message: "Usuario mostrado",
       data: {
-        question: question[0]
+        result: result[0]
       },
     });
   } catch (error) {

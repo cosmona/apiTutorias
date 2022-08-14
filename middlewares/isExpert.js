@@ -1,6 +1,4 @@
 "use strict";
-//^npm import
-const jwt = require("jsonwebtoken");
 
 //^ import helper para generar errores
 const { generateError } = require("../helpers");
@@ -17,13 +15,11 @@ const isExpert = async (req, res, next) => {
     connection = await connectDB();
 
     //* obtiene id y ell rol del usuario logeado actualmente
-      const { id, role } = req.userToken;
+      const { role } = req.userToken;
 
-    //* verifica el rol
+    //! verifica el rol
     if (role !== "Expert") {
-        const error = new Error("No tienes permisos por no ser Experto");
-        error.httpStatus = 403;
-        throw error;
+        await generateError("No tienes permisos", 403) ;
     }
 
     next();

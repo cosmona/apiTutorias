@@ -30,7 +30,7 @@ const getQuestions = async (req, res, next) => {
     WHERE question_id = ?;`
     ,[id]);
     
-    //* Error
+    //! Error
     if(!question[0]){
       await generateErrors("No se ha encontrado esta pregunta", 401);
     }

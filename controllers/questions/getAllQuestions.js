@@ -58,7 +58,7 @@ const getAllQuestions = async (req, res, next) => {
       //* Devolvemos resultado
       res.send({
         status: 'ok',
-        message: 'Questions mostradas',
+        message: 'Preguntas mostradas',
         data:listQuestions,
       });
     } catch (error) {

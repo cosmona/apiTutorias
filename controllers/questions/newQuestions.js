@@ -9,7 +9,6 @@ const connectDB = require('../../db/db');
 const newQuestions = async (req, res, next) => {
     let connection;
 
-	
     try {
 	    //* formatea la fecha para la bd
 		const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
@@ -26,6 +25,7 @@ const newQuestions = async (req, res, next) => {
     INSERT INTO questions (questiondate, title, question, user_id, technology) 
     VALUES (?,?,?,?,?) 
 		`,[creationDate, title, question,id,technology]);
+
     
     //* Devolvemos resultado
       res.send({

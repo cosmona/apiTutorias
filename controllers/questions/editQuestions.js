@@ -12,11 +12,22 @@ const editQuestions = async (req, res, next) => {
     try {
       //* Conexion al DB
       connection = await connectDB();
-  
+      
       //* Recoger parametros
       const { title, question, technology } = req.body;
 	    const idQuestion = req.params.id;
-	
+      const idUser = req.userToken.id;
+      
+      //~ Consulta SQL - Comparación de ID
+      const userID = await connection.query(`
+      SELECT User_ID FROM questions WHERE ID = ?;
+      `,[idQuestion]);
+      
+      //! Control de errores - usuario id y pregunta id no coinciden
+      if(idUser !== userID[0][0].User_ID){
+       await generateErrors("No puedes editar esta pregunta", 409)
+      }
+
       //~ Montamos consulta SQL
       let consult =`UPDATE questions SET `;
       if(title){        
@@ -35,13 +46,10 @@ const editQuestions = async (req, res, next) => {
           consult += ` technology="${technology}"`;
       }
       consult += ` WHERE ID = ${idQuestion} AND User_ID= ${req.userToken.id};`;
-      
-      //~ Ejecuta consulta SQL
+            
       const [currentUser] = await connection.query(consult);
-      console.log('currentUser', currentUser)
       
       //! Error
-      //TODO si el usuario que quiere modificar no es el creador de la pregunta se va por aqui
       if(currentUser.affectedRows === 0){
         await generateErrors("No se ha encontrado esta pregunta", 409)
       }

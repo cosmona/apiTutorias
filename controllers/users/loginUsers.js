@@ -27,12 +27,13 @@ const loginUsers = async (req, res, next) => {
     //~ Consulta SQL - selecionamos el usuario con este email y password
     const [user] = await connection.query(
       `
-        SELECT ID, UserRole, Activation
-        FROM users
-        WHERE Email=? AND Password=SHA2(?, 512)
-    `,
+      SELECT ID, UserRole, Activation
+      FROM users
+      WHERE Email=? AND Password=SHA2(?, 512)
+      `,
       [email, password]
-    );
+      );
+      
     //! si no encuentro el usuario salgo con error
     if (user.length === 0) {
      await generateErrors("Email o password incorrecto", 401)

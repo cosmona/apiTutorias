@@ -1,5 +1,4 @@
 "use strict";
-//TODO cuando la respuesta va a una question que no existe no da un error especifico
 //^ npm import
 const { format } = require("date-fns");
 
@@ -49,11 +48,15 @@ const newAnswers = async (req, res, next) => {
     }
 
     //~ Consulta SQL
-    await connection.query(
-      `INSERT INTO answers( AnswerDate, Answer, User_ID, Question_ID )
-      VALUES (?,?,?,?);`,
-      [creationDate, answer, user_id, question_id]
-    );
+    try {      
+      await connection.query(
+        `INSERT INTO answers( AnswerDate, Answer, User_ID, Question_ID )
+        VALUES (?,?,?,?);`,
+        [creationDate, answer, user_id, question_id]
+        );
+      } catch (error) {
+        await generateErrors("No existe pregunta asociada", 409);
+      }
 
     //~ Consulta SQL - cambia el valor answered en la tabla questions a true
     await connection.query(
