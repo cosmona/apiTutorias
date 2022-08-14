@@ -3,6 +3,10 @@
 //^ Importamos funcion que conecta a la BD
 const connectDB = require('../../db/db');
 
+//^ Importa funcion de errores
+const { generateErrors } = require('../../helpers');
+
+
 //& Borra respuestas
 const deleteAnswers = async (req, res, next) => {
   let connection;
@@ -22,11 +26,20 @@ const deleteAnswers = async (req, res, next) => {
 
       //* si no existe la respuesta
       if(estate[0].affectedRows === 0){
-        const error = new Error("No existe la respuesta");
-        error.httpStatus = 409;
-        throw error;
+        await generateErrors("No existe la respuesta", 409 );
       }
-      
+
+      //TODO cambiar valor solo si no quedan respuestas
+/*
+      //~ Consulta SQL - cambia el valor answered en la tabla questions a false
+        await connection.query(
+          `UPDATE questions
+          SET Answered=0
+          WHERE ID=?;`,
+      [question_id]
+      );
+*/
+
       //* Devolvemos resultado
       res.send({
         status: 'ok',

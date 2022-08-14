@@ -3,6 +3,9 @@
 //^ Importamos funcion que conecta a la BD
 const connectDB = require("../../db/db");
 
+//^ Importa funcion que genera errores
+const generateErrors = require('../../helpers');
+
 //& muestra preguntas
 const getAnswers = async (req, res, next) => {
   let connection;
@@ -10,17 +13,26 @@ const getAnswers = async (req, res, next) => {
   try {
     //* Conexion al DB
     connection = await connectDB();
-    const { id } =  req.params;
 
     //* Recuperar parametros 
+    const { id } =  req.params;
+
+
+    //~ Consulta SQL de la respuesta por id
     const [answer] = await connection.query(
       `
       SELECT *
       FROM  answers
       WHERE id = ?
       `, [id]);
+    
+    //* Error
+    if(!answer[0]){
+      await generateErrors("No se han encontrado respuestas", 401);
+    }  
 
-    //* agarrar los votos
+
+    //* seleccionar los votos
     const [answer_votes] = await connection.query(
       `
       SELECT * 
@@ -43,7 +55,7 @@ const getAnswers = async (req, res, next) => {
     //* Devolvemos resultado
     res.send({
       status: "ok",
-      message: "Respuesta mostradas",
+      message: "Respuestas mostradas",
       data: answer,
       votes: answer_votes,
       Media: media,

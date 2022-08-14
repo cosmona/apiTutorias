@@ -27,10 +27,7 @@ const editAnswers = async (req, res, next) => {
 
     //* si no existe la respuesta
     if(estate[0].affectedRows === 0){
-      generateErrors("No existe la respuesta", 409)
-      // const error = new Error("No existe la respuesta");
-      // error.httpStatus = 409;
-      // throw error;
+      await generateErrors("No existe la respuesta", 409)
     }
 
     //* Devolvemos resultado
