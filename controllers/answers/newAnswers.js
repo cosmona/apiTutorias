@@ -6,6 +6,9 @@ const { format } = require("date-fns");
 //^ Importamos funcion que conecta a la BD
 const connectDB = require("../../db/db");
 
+//^ Importa funcion de errores
+const { generateErrors } = require('../../helpers');
+
 //& Crea respuestas
 const newAnswers = async (req, res, next) => {
   let connection;
@@ -30,23 +33,19 @@ const newAnswers = async (req, res, next) => {
 
     //* si no existe la pregunta 
     if (question.length === 0) {
-      const error = new Error("Esta pregunta no existe");
-      error.httpStatus = 409;
-      throw error;
+      await generateErrors("Esta pregunta no existe", 409);
     }
 
-    //* chequea que esta persona no haya respondido ya
+    //* comprueba que esta persona no haya respondido ya
     const answerExist = await connection.query(
       `SELECT * FROM answers
       WHERE User_id = ? AND question_id=?;`,
       [user_id, question_id]
     );
 
-    //* si ya ha respndido la pregunta
+    //* si ya ha respondido a la pregunta
     if (answerExist[0].length !== 0) {
-      const error = new Error("Ya has respondido esta pregunta");
-      error.httpStatus = 409;
-      throw error;
+      await generateErrors("Ya has respondido esta pregunta", 409);
     }
 
     //~ Consulta SQL
@@ -72,7 +71,7 @@ const newAnswers = async (req, res, next) => {
   } catch (error) {
     next(error);
   } finally {
-    //* Acaba la conexion
+    //* Finaliza la conexion
     if (connection) connection.release();
   }
 };

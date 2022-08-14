@@ -6,6 +6,9 @@ const { format } = require("date-fns");
 //^ Importamos funcion que conecta a la BD
 const connectDB = require("../../db/db");
 
+//^ Importa funcion de errores
+const { generateErrors } = require('../../helpers');
+
 //& Crea votos
 const newVotes = async (req, res, next) => {
   let connection;
@@ -32,11 +35,11 @@ const newVotes = async (req, res, next) => {
       
     //* si no existe la pregunta 
     if (answer.length === 0) {
-      const error = new Error("No puedes votar a esta respuesta");
-      error.httpStatus = 409;
-      throw error;
+      await generateErrors("No puedes votar esta respuesta", 409);
     }
-    //todo error cuando el enum es violado 
+
+
+    //todo error enum prohibido
 
     //* Devolvemos resultado
     res.send({

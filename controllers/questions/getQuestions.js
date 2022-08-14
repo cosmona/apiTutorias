@@ -30,8 +30,6 @@ const getQuestions = async (req, res, next) => {
     WHERE question_id = ?;`
     ,[id]);
     
-    console.log('question', question[0]);
-
     //* Error
     if(!question[0]){
       await generateErrors("No se ha encontrado esta pregunta", 401);
@@ -40,7 +38,7 @@ const getQuestions = async (req, res, next) => {
     //* Devolvemos resultado
     res.send({
       status: "ok",
-      message: "Questions mostradas",
+      message: "Preguntas mostradas",
       data: {
         question: question[0],
         answer: answers,
