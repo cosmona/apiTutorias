@@ -25,9 +25,9 @@ app.use(express.json());
 const { PORT } = process.env;
 
 //& Endpoints Users
-//* GET - /users/** - mostrar usuario | Token y Solo el propio usuario (+ o - datos)
-app.get("/users/:id", isUser, viewUsers);
-app.get("/users/", viewUsers);
+//* GET - /users/** - mostrar usuarios
+app.get("/users/:id", isUser, viewUsers); //* Lista un usuario -  Token  y Solo el propio usuario (+ o - datos)
+app.get("/users/", viewUsers);            //* Lista todos los usuarios
 
 //* POST - /users/** - Crear el usuario
 app.post("/users", newUsers);
