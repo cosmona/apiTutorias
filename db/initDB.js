@@ -99,22 +99,24 @@ async function main() {
 					Email,
 					Password,
 					UserRole,
+					Activation,
 					Technology,
 					LastAuthUpdate
-				) VALUES (?,?,?,SHA2(?, 512),?,?,?)
+				) VALUES (?,?,?,SHA2(?, 512),?,?,?,?)
 		`,
       [
         creationDate,
         "Profesor",
         "profesor@gmail.com",
-        "123456",
+        "123456789",
         "Expert",
+		"1",
         "CSS",
         creationDate,
       ]
     );
 
-    console.log("Finalizado profesor");
+    console.log("Finalizado profesor - profesor@gmail.com : pass:123456789");
 
     await connection.query(
       `
@@ -124,19 +126,21 @@ async function main() {
 					Email,
 					Password,
 					UserRole,
+					Activation,
 					LastAuthUpdate
-				) VALUES (?,?,?,SHA2(?, 512),?,?)
+				) VALUES (?,?,?,SHA2(?, 512),?,?,?)
 		`,
       [
         creationDate,
         "Alumno",
         "alumno@gmail.com",
-        "123456",
+        "123456789",
         "Student",
+		"1",
         creationDate,
       ]
     );
-    console.log("Finalizado alumno");
+    console.log("Finalizado alumno - alumno@gmail.com : pass:123456789");
   } catch (error) {
     console.error("ERROR:", error.message);
   } finally {

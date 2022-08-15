@@ -18,46 +18,45 @@ const deleteAnswers = async (req, res, next) => {
       //* Recuperar parametros desde el endpoint (:id) e idUser (token)
       const idAnswer = req.params.id;
       const idUser = req.userToken.id;
-      //~ Consulta SQL
+
+      //~ Consulta SQL- Guarda el ID de la pregunta
       let Question_ID = await connection.query(`
-      SELECT Question_ID FROM answers WHERE ID =?;`,
+        SELECT Question_ID FROM answers WHERE ID =?;`,
       [idAnswer]);
+
       Question_ID = Question_ID[0][0].Question_ID;
 
-      //~ Consulta SQL
+      //~ Consulta SQL - Borra la respuesta si coincide el ID y el usuario
       const estate = await connection.query(`
-      DELETE FROM answers WHERE User_ID = ? AND ID = ?;`,
+        DELETE FROM answers WHERE User_ID = ? AND ID = ?;`,
       [idUser, idAnswer]);
       
-      //* si no existe la respuesta
+      //! Control de errores - si no existe la respuesta
       if(estate[0].affectedRows === 0){
         await generateErrors("No existe la respuesta", 409 );
       }
 
-      //* buscar si hay mas respuestas a la pregunta asociada a la answer borrada
+      //~ Consulta SQL - Busca si hay mas respuestas a la pregunta asociada de la respuesta borrada
       const [moreAnswers] = await connection.query(
         'SELECT * FROM answers WHERE Question_ID = ?; '
         ,[Question_ID]
       ) 
-      //*si no hay mas cambiar campo de la question
-      console.log('moreAnswers', moreAnswers)
-        if( moreAnswers.length <= 0){
-          //~ Consulta SQL - cambia el valor answered en la tabla questions a false
-          await connection.query(
-            `UPDATE questions
-            SET Answered = 0
-            WHERE ID = ?;`,
-            [Question_ID]
-            );
-            
-        }
 
+      //*si no hay mas cambiar campo de la question
+      if( moreAnswers.length <= 0){
+        //~ Consulta SQL - cambia el valor answered en la tabla questions a false
+        await connection.query(
+          `UPDATE questions SET Answered = 0 WHERE ID = ?;`,
+            [Question_ID]
+        ); 
+      }
 
       //* Devolvemos resultado
       res.send({
         status: 'ok',
-        message: 'Answer borrada',
+        message: 'Respuesta borrada',
       });
+
     } catch (error) {
       next(error);
     } finally {

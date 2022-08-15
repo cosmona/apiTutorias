@@ -10,7 +10,7 @@ const connectDB = require("../../db/db");
 const { validate, generateErrors } = require("../../helpers");
 const { registrationSchema } = require("../../schemas");
 
-//& Login de usuario
+//& POST - /users/login** - Login de un usuario y devolverá el TOKEN
 const loginUsers = async (req, res, next) => {
   let connection;
 

@@ -9,7 +9,7 @@ const { validate, generateErrors } = require("../../helpers");
 const { registrationSchema } = require("../../schemas");
 
 
-//& Edita un usuario
+//& PUT - /users/:id** - Editar un usuario | Token y Solo el propio usuario
 const userEdit = async (req, res, next) => {
     let connection;
     
@@ -28,7 +28,7 @@ const userEdit = async (req, res, next) => {
         //* Sacar id de req.body
         const { username, email, userRole, technology } = req.body;
 
-        //! comprobacion del rol
+        //! Control de errores - comprobacion del rol
         if (userRole!=="Student" && userRole!=="Expert") {
             await generateErrors("Rol no valido",409);
         }
@@ -43,9 +43,18 @@ const userEdit = async (req, res, next) => {
         if(userRole){
             consult += `,userRole="${userRole}"`;
         }
-        if(technology){
-            consult += `,technology="${technology}"`;
-        }
+            if (userRole === "Expert"){
+                if(technology){
+                    consult += `,technology="${technology}"`;
+                } else {
+                    //! Control de errores - si es experto hay que indicar de que tecnologia
+                    await generateErrors("Debes indicar una tecnologia valida HTML-CSS-JavaScript-SQL-Node-React",409);
+                }
+            } else{
+                //* el rol no es experto ponemos la tecnologia a NULL
+                consult += `,technology = NULL`;
+
+            } 
 
         consult += ` WHERE ID = ${req.userToken.id}`;
 

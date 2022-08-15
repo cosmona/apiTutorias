@@ -4,7 +4,7 @@
 const connectDB = require("../../db/db");
 
 //^ Importa funcion que genera errores
-const generateErrors = require('../../helpers');
+const {generateErrors} = require('../../helpers');
 
 //& muestra preguntas
 const getAnswers = async (req, res, next) => {

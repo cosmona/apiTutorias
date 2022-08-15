@@ -19,13 +19,12 @@ const editAnswers = async (req, res, next) => {
 	    const idAnswers = req.params.id;
 	    const idUser = req.userToken.id;
 	  
-    //~ consulta SQL
-    let consult =`
-                  UPDATE answers SET Answer = "${answer}" 
-                  WHERE ID = ${idAnswers} AND User_ID = ${idUser};`;
+    //~ Consulta SQL - Actualiza la respuesta si coincide el Id y el usuario
+    let consult =`UPDATE answers SET Answer = "${answer}" 
+                    WHERE ID = ${idAnswers} AND User_ID = ${idUser};`;
     const estate = await connection.query(consult);
 
-    //* si no existe la respuesta
+    //!Control de errores - si no existe la respuesta
     if(estate[0].affectedRows === 0){
       await generateErrors("No existe la respuesta", 409)
     }
