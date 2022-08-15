@@ -11,35 +11,6 @@
 			"name": "Users",
 			"item": [
 				{
-					"name": "newUsers",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\": \"ale\",\n    \"email\": \"inakip.f@gmail.com\",\n    \"password\": \"123456789\",\n    \"userRole\": \"Expert\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:{{port}}/users/",
-							"host": [
-								"localhost"
-							],
-							"port": "{{port}}",
-							"path": [
-								"users",
-								""
-							]
-						},
-						"description": "//* POST - /users/** - Crear el usuario\n\napp.post(\"/users\", newUsers);"
-					},
-					"response": []
-				},
-				{
 					"name": "loginUsers",
 					"event": [
 						{
@@ -77,7 +48,8 @@
 								"login",
 								""
 							]
-						}
+						},
+						"description": "//* POST - /users/login** - Login de un usuario y devolverá el TOKEN"
 					},
 					"response": [
 						{
@@ -217,6 +189,124 @@
 					]
 				},
 				{
+					"name": "viewUsers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:{{port}}/users/2",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"users",
+								"2"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "viewUsers (Un usuario)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:{{port}}/users/2",
+									"host": [
+										"localhost"
+									],
+									"port": "{{port}}",
+									"path": [
+										"users",
+										"2"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "viewUsers (Todos)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:{{port}}/users/",
+									"host": [
+										"localhost"
+									],
+									"port": "{{port}}",
+									"path": [
+										"users",
+										""
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
+				},
+				{
+					"name": "newUsers",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"inaki\",\n    \"email\": \"inakipf@gmail.com\",\n    \"password\": \"123456789\",\n    \"userRole\": \"Expert\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:{{port}}/users/",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"users",
+								""
+							]
+						},
+						"description": "//* POST - /users/** - Crear el usuario\n\napp.post(\"/users\", newUsers);"
+					},
+					"response": []
+				},
+				{
 					"name": "editUser",
 					"event": [
 						{
@@ -256,13 +346,6 @@
 							"path": [
 								"users",
 								""
-							],
-							"query": [
-								{
-									"key": "pepe",
-									"value": "",
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -288,13 +371,6 @@
 							"path": [
 								"users",
 								""
-							],
-							"query": [
-								{
-									"key": "pepe",
-									"value": "",
-									"disabled": true
-								}
 							]
 						}
 					},
@@ -319,85 +395,12 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "viewUsers",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "authorization",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "localhost:{{port}}/users/2",
-							"host": [
-								"localhost"
-							],
-							"port": "{{port}}",
-							"path": [
-								"users",
-								"2"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
 		{
 			"name": "Questions",
 			"item": [
-				{
-					"name": "editQuestions",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "authorization",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\": \"mario\",\n    \"question\": \"nueva pregunta\",\n    \"technology\": \"CSS\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:{{port}}/questions/1",
-							"host": [
-								"localhost"
-							],
-							"port": "{{port}}",
-							"path": [
-								"questions",
-								"1"
-							],
-							"query": [
-								{
-									"key": "pepe",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "getQuestions",
 					"request": {
@@ -439,38 +442,6 @@
 					"response": []
 				},
 				{
-					"name": "oneQuestion",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "authorization",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "localhost:{{port}}/questions/1",
-							"host": [
-								"localhost"
-							],
-							"port": "{{port}}",
-							"path": [
-								"questions",
-								"1"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "newQuestions",
 					"request": {
 						"method": "POST",
@@ -504,7 +475,41 @@
 					"response": []
 				},
 				{
-					"name": "Delete Question",
+					"name": "editQuestions",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"mario\",\n    \"question\": \"nueva pregunta\",\n    \"technology\": \"CSS\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:{{port}}/questions/1",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"questions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteQuestions",
 					"request": {
 						"method": "DELETE",
 						"header": [
@@ -527,87 +532,37 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "oneQuestion",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:{{port}}/questions/1",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"questions",
+								"1"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
 			"name": "Answers",
 			"item": [
-				{
-					"name": "editAnswers",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "authorization",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"answer\": \"mario\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:{{port}}/answers/2",
-							"host": [
-								"localhost"
-							],
-							"port": "{{port}}",
-							"path": [
-								"answers",
-								"2"
-							],
-							"query": [
-								{
-									"key": "pepe",
-									"value": "",
-									"disabled": true
-								}
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "deleteAnswers",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "authorization",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"answer\": \"mario\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "localhost:{{port}}/answers/2",
-							"host": [
-								"localhost"
-							],
-							"port": "{{port}}",
-							"path": [
-								"answers",
-								"2"
-							]
-						}
-					},
-					"response": []
-				},
 				{
 					"name": "getAnswers",
 					"protocolProfileBehavior": {
@@ -680,6 +635,81 @@
 							"port": "{{port}}",
 							"path": [
 								"answers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editAnswers",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"answer\": \"mario\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:{{port}}/answers/2",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"answers",
+								"2"
+							],
+							"query": [
+								{
+									"key": "pepe",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deleteAnswers",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"answer\": \"mario\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:{{port}}/answers/2",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"answers",
+								"2"
 							]
 						}
 					},

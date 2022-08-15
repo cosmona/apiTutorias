@@ -34,17 +34,17 @@ const loginUsers = async (req, res, next) => {
       [email, password]
       );
       
-    //! si no encuentro el usuario salgo con error
+    //! Control de errores - si no encuentro el usuario salgo con error
     if (user.length === 0) {
      await generateErrors("Email o password incorrecto", 401)
     }
     
-    //! comprobar que el usuario sea activo
+    //! Control de errores - comprobar que el usuario este activo
     if (!user[0].Activation) {
      await generateErrors("El usuario no está activado", 401)
     }
 
-    //* creo objeto con los datos que quiero guardar en el token
+    //* crear objeto con los datos que quiere guardar en el token
     const info = {
       id: user[0].ID,
       role: user[0].UserRole,

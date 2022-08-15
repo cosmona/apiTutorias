@@ -20,9 +20,15 @@ const deleteQuestions = async (req, res, next) => {
       
       //~ Consulta SQL - Comparación de ID
       const userID = await connection.query(`
+      
       SELECT User_ID FROM questions WHERE ID = ?;
       `,[idQuestion]);
       
+      //! Control de errores - Si no exite la pregunta
+       if(userID[0].length === 0){
+        await generateErrors("No existe la pregunta", 409)
+      }
+
       //! Control de errores - usuario id y pregunta id no coinciden
       if(idUser !== userID[0][0].User_ID){
         await generateErrors("No puedes borrar esta pregunta", 409)
@@ -44,10 +50,10 @@ const deleteQuestions = async (req, res, next) => {
         DELETE FROM questions WHERE User_ID = ? AND ID = ?;
       `,[idUser,idQuestion])
 
-      //! Si no exite la pregunta
+      /* //! Si no exite la pregunta
       if(estate[0].affectedRows === 0){
         await generateErrors("No existe la pregunta", 409)
-      }
+      } */
       
       //* Devolvemos resultados
       res.send({

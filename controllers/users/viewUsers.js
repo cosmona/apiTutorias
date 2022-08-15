@@ -6,9 +6,11 @@ const connectDB = require("../../db/db");
 //^ Importamos funcion validate - genera errores y schema que comprueba los datos
 const { generateErrors } = require("../../helpers");
 
-//& Muestra una pregunta
+//& GET - /users/** - mostrar usuario | Token y Solo el propio usuario (+ o - datos)
 const viewUsers = async (req, res, next) => {
   let connection;
+  let myId = 0;
+  let result;
 
   try {
     //* Conexion al DB
@@ -16,40 +18,47 @@ const viewUsers = async (req, res, next) => {
 
     //* Recoger parametros
     const { id } = req.params;
-    const myId = req.userToken.id;
 
-    let result;
-  
-    //* si es el propio usuario enseña mas o menos datos
-    if (id == myId){
-      //~ Consulta SQL de una pregunta por id
-      result = await connection.query(`
-      SELECT * FROM users
-      WHERE id = ?;
-      `,[id]);
+    //* SI se ha pasado el ID de un usuario
+    if (id !== undefined) {
+      myId = req.userToken.id;
+
+      //* si es el propio usuario enseña mas o menos datos
+      if (id == myId){
+        //~ Consulta SQL de una pregunta por id
+        result = await connection.query(`
+        SELECT * FROM users
+        WHERE id = ?;
+        `,[id]);
+      } else {
+        //~ Consulta SQL de una pregunta por id
+        result = await connection.query(`
+        SELECT Username, UserRole, Technology FROM users
+        WHERE id = ?;
+        `,[id]);
+      }
+      
+      //! no existe el usuario
+      if (result[0].length === 0) {
+        await generateErrors ("Usuario no encontrado", 409)
+      }
     } else {
+      //*no se ha pasado Id de usuario y enseña todos los usuarios
       //~ Consulta SQL de una pregunta por id
-      result = await connection.query(`
-      SELECT Username, UserRole, Technology FROM users
-      WHERE id = ?;
-      `,[id]);
+      result = await connection.query(`SELECT Username, UserRole, Technology FROM users;`);     
     }
-    
-    //! no existe el usuario
-    if(result[0].length === 0){
-      await generateErrors ("Usuario no encontrado", 409)
-    }
-    
-
-    //* Devolvemos resultado
-    res.send({
-      status: "ok",
-      message: "Usuario mostrado",
-      data: {
-        result: result[0]
-      },
-    });
-  } catch (error) {
+     
+     
+     //* Devolvemos resultado
+     res.send({
+       status: "ok",
+       message: "Usuario mostrado",
+       data: {
+         result: result[0]
+        },
+      });
+      
+    } catch (error) {
     next(error);
   } finally {
     //* Acaba la conexion

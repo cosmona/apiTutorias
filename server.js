@@ -26,7 +26,8 @@ const { PORT } = process.env;
 
 //& Endpoints Users
 //* GET - /users/** - mostrar usuario | Token y Solo el propio usuario (+ o - datos)
-app.get("/users/:id", isUser, viewUsers)
+app.get("/users/:id", isUser, viewUsers);
+app.get("/users/", viewUsers);
 
 //* POST - /users/** - Crear el usuario
 app.post("/users", newUsers);
@@ -66,7 +67,7 @@ app.delete("/questions/:id",isUser, deleteQuestions)
 //* POST - /answers** - crea una respuesta | Token obligatorio y solo si es especialista
 app.post("/answers", isUser, isExpert, newAnswers);
 
-//* GET 
+//* GET - muestra una respuesta
 app.get("/answers/:id", getAnswers);
 
 //* DELETE - /answers/:id** - borra una respuesta | Token obligatorio y mismo usuario.
