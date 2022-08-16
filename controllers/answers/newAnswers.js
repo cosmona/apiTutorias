@@ -11,7 +11,6 @@ const { generateErrors } = require('../../helpers');
 //& POST - /answers - crea una respuesta
 const newAnswers = async (req, res, next) => {
   let connection;
-
   try {
     //* formatea la fecha para la bd
     const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
@@ -22,6 +21,7 @@ const newAnswers = async (req, res, next) => {
     //* Recuperar parametros desde el body y desde el token
     const { answer, question_id } = req.body;
     const user_id = req.userToken.id;
+    let answerID;
 
     //~ Consulta SQL - Busca si existe la pregunta
     const question = await connection.query(
@@ -47,11 +47,13 @@ const newAnswers = async (req, res, next) => {
 
     //~ Consulta SQL - Inserta la respuesta en la BD
     try {      
-      await connection.query(
+      let respuesta = await connection.query(
         `INSERT INTO answers( AnswerDate, Answer, User_ID, Question_ID )
         VALUES (?,?,?,?);`,
         [creationDate, answer, user_id, question_id]
         );
+        answerID = respuesta[0].insertId;
+        console.log('respuesta', respuesta[0].insertId);
     } catch (error) {
         //! Control de errores - Si da error en la foreing key de Question_ID
         await generateErrors("No existe pregunta asociada", 409);
@@ -67,6 +69,9 @@ const newAnswers = async (req, res, next) => {
     res.send({
       status: "ok",
       message: "Respuesta creada",
+      data: {
+        answerID
+      }
     });
     
   } catch (error) {

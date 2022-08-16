@@ -37,6 +37,11 @@ const newUsers = async (req, res, next) => {
     //* validacion de los datos del body
     await validate(registrationSchema, valida);
 
+    //! Si es experto y no especifica la tecnologia
+    if (userRole === 'Expert' && !Technology){
+      await generateErrors('Por favor indique la Technology', 409);
+    }
+
     //~ Consulta SQL - Consultar DB para ver si el usuario existe
     const [users] = await connection.query(
       `SELECT * FROM users
