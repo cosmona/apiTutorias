@@ -8,6 +8,8 @@ const connectDB = require('../../db/db');
 const { validate, generateErrors } = require("../../helpers");
 const { registrationSchema } = require("../../schemas");
 
+//^ Importamos el fichero .env
+require("dotenv").config();
 
 //& PUT - /users/:id** - Editar un usuario | Token y Solo el propio usuario
 const userEdit = async (req, res, next) => {
@@ -17,12 +19,24 @@ const userEdit = async (req, res, next) => {
         //* Conexion al DB
         connection = await connectDB();
       
+        //* Recuperamos parametros
+        const {TECHNOLOGIES} = process.env;
         const valida = {
             "email":req.body.email,
             "password":req.body.password
         }
 
-        //* validacion de los datos del body faltan userRole y technology
+        //! Control de errores - mira que la tecnologia sea permitida
+        if(!TECHNOLOGIES.includes(technology)){
+            await generateErrors("Tecnologia no valida",409);
+        }
+
+         //! Control de errores - Si es experto y no especifica la tecnologia
+        if (userRole === 'Expert' && !technology){
+            await generateErrors('Por favor indique la Technology', 409);
+        }
+
+        //* validacion de los datos del body 
          await validate(registrationSchema, valida);
 
         //* Sacar id de req.body
@@ -32,6 +46,7 @@ const userEdit = async (req, res, next) => {
         if (userRole!=="Student" && userRole!=="Expert") {
             await generateErrors("Rol no valido",409);
         }
+        
         //~ Consulta SQL - Modificar la información actual del usuario en la base de datos
         let consult =`UPDATE users SET `;
         if(email){        
