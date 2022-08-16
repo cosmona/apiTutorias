@@ -19,22 +19,35 @@ const deleteAnswers = async (req, res, next) => {
       const idAnswer = req.params.id;
       const idUser = req.userToken.id;
 
+      // //~ Consulta SQL- Guarda el ID de la pregunta
+      // let Question_ID = await connection.query(`
+      //   SELECT Question_ID FROM answers WHERE ID =?;`,
+      // [idAnswer]);
       //~ Consulta SQL- Guarda el ID de la pregunta
-      let Question_ID = await connection.query(`
-        SELECT Question_ID FROM answers WHERE ID =?;`,
+      let [QuestionData] = await connection.query(`
+      SELECT Question_ID, User_ID FROM answers WHERE ID =?;`,
       [idAnswer]);
+      
+      //! Control de errores - si no existe la respuesta
+      if(QuestionData.length === 0){
+        await generateErrors("No existe la respuesta", 409 );
+      }
 
-      Question_ID = Question_ID[0][0].Question_ID;
+      const Question_ID = QuestionData[0].Question_ID;
+      const QuestionUser_ID = QuestionData[0].User_ID;
+
+      //! Control de errores - si no eres la persona que creo la respuesta
+      if(QuestionUser_ID !== idUser){
+        await generateErrors("No tienes permiso de borrar esta respuesta", 409 );
+      }
 
       //~ Consulta SQL - Borra la respuesta si coincide el ID y el usuario
       const estate = await connection.query(`
-        DELETE FROM answers WHERE User_ID = ? AND ID = ?;`,
+      DELETE FROM answers WHERE User_ID = ? AND ID = ?;`,
       [idUser, idAnswer]);
       
-      //! Control de errores - si no existe la respuesta
-      if(estate[0].affectedRows === 0){
-        await generateErrors("No existe la respuesta", 409 );
-      }
+      console.log('estate', estate);
+
 
       //~ Consulta SQL - Busca si hay mas respuestas a la pregunta asociada de la respuesta borrada
       const [moreAnswers] = await connection.query(
