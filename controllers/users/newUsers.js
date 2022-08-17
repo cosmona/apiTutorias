@@ -89,8 +89,20 @@ const newUsers = async (req, res, next) => {
         technology,
       ]
     );
-    let cuerpo = `Bienvenido a Alejandria, por favor verifique su correo <a href="http://127.0.0.1:3000/users/validate/${RegistrationCode}">aqui!</a>`;
-    let subject = "Correo de verificación Alejandria";
+    let cuerpo = `
+                    <body>
+                      <header style="text-align: center;">
+                        <img src="https://apitutorias.netlify.app/images/logo.png" width="400px" alt="">
+                      </header>
+                      <p style="text-align: center;">
+                        Bienvenido a Alejandria, por favor verifique su correo <a href="http://127.0.0.1:3000/users/validate/${RegistrationCode}">aqui!</a>
+                      </p>
+                      
+                    </body>
+                   
+      `;
+
+      let subject = "Correo de verificación Alejandria";
   
     //* envia correo de validacion
     const msg = {
