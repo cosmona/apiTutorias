@@ -49,19 +49,54 @@ usuario admin.
 
 ## ENDPOINTS
 
+⭕️: endpoint.    
+
+🔒️: token.
+
+💀️: depende del usuario.
+
 ### USERS
 
----
 
-- [x] ⭕️🔒️💀️ **POST - /users/** - Crear el usuario
+- [x] ⭕️🔒️💀️ **POST - /users/** - Crear el usuario.
+  
+Si eres Expert tienes que agregar el campo Technology y escoger entre "HTML", "CSS", "JavaScript", "SQL", "Node" o "React".
 
-- [x] ⭕️🔒️💀️ **POST - /users/validate/:RegistrationCode** - Validar el usuario
+```json
+     {
+            "username": "usuario",
+            "email": "correo@correo.com",
+            "password": "contraseña",
+            "userRole": "Expert/Student"
+      }
+```
+
+- [x] ⭕️🔒️💀️ **POST - /users/validate/:RegistrationCode** - Validar el usuario.
+  
+  
 
 - [x] ⭕️ **POST - /users/login** - Hará el login de un usuario y
       devolverá el TOKEN
 
+```json
+      {
+         "email": "correo@correo.com",
+         "password" :"123456789"
+      }
+```
+
 - [x] ⭕️🔒️💀️ **PUT - /users/:id** - Editar un usuario | Token y Solo el
       propio usuario
+
+```json
+      {
+            "username": "Alumno",
+            "email": "correo@correo.com",
+            "password": "contraseña",
+            "userRole": "Expert/Student",
+            "technology": "tech"
+      }
+```
 
 - [x] ⭕️🔒️💀️ **DELETE - /users/:id/** - borra un usuario | Token obligatorio y mismo usuario
 
@@ -82,15 +117,32 @@ usuario admin.
 
 ### QUESTIONS
 
----
+
 
 - [x] ⭕️ **GET - /questions** - JSON con lista todas las entradas y buscar entradas | Sin token - GET - /questions?name=nombre&category=categoria&date=fecha&answer=true
 
 - [x] ⭕️ **GET - /questions/:id** - JSON que muestra información de una entrada | Sin token
 
 - [x] ⭕️🔒️ **POST - /questions** - crea una entrada | Token obligatorio
+  
+```json
+{
+      "question":"cuerpo de la pregunta",
+      "technology":"CSS",
+      "title": "titulo de la pregunta "
+}
+
+```
 
 - [x] ⭕️🔒️💀️ **PUT - /questions/:id** - edita una entrada | Token obligatorio y mismo usuario.
+  
+```json
+{
+"title": "nueno titulo",
+"question": "nueva pregunta",
+"technology": "nueva tech"
+}
+``` 
 
 - [x] ⭕️🔒️💀️ **DELETE - /questions/:id** - borra una entrada | Token obligatorio y mismo usuario.
 
@@ -104,7 +156,15 @@ usuario admin.
 
 
 - [x] ⭕️🔒️ ****POST - /answers** - crea una respuesta | Token obligatorio y
-      solo si es especialis**ta
+      solo si es especialista
+
+
+```json
+{
+      "answer": "respuesta",
+      "question_id": "ID de pregunta"
+}
+```
 
 - [x] ⭕️🔒️💀️ **POST - /answers/:id/votes** - vota una respuesta | Token
       obligatorio pero cada usuario solo puede votar una vez y las
@@ -127,84 +187,3 @@ usuario admin.
 - [ ] ⭕️🔒️💀️ **DELETE - /answers/:id/photos/:photoID** - borra una imagen
       de una respuesta | Token obligatorio y mismo usuario.
 
-## Template para postman
-
-# Users
-
-## POST - loginUsers
-
-```json
-      {
-      "email": "correo@correo.com",
-      "password" :"123456789"
-      }
-```
-
-## POSR - newUsers
-
-```json
-      {
-      "username": "usuario",
-      "email": "correo@correo.com",
-      "password": "contraseña",
-      "userRole": "Expert/Student"
-      }
-
-´´´
-Si eres Expert tienes que agregar el campo Technology y escoger entre"HTML", "CSS", "JavaScript", "SQL", "Node" o "React"
-
-## PUT- editUser 
-
-```json
-      {
-      "username": "Alumno",
-      "email": "correo@correo.com",
-      "password": "contraseña",
-      "userRole": "Expert/Student",
-      "technology": "tech"
-      }
-
-```
-Se puede colocar 1 o mas campos
-
-# Questions
-
-## POST - newQuestions
-
-```json
-{
-"question":"cuerpo de la pregunta",
-"technology":"CSS",
-"title": "titulo de la pregunta "
-}
-
-```
-
-## PUT - editQuestions
-
-```json
-{
-"title": "nueno titulo",
-"question": "nueva pregunta",
-"technology": "nueva tech"
-}
-``` 
-Se puede colocar 1 o mas campos
-
-# Answers
-
-## POST - newAnswer
-
-```json
-{
-"answer": "respuesta",
-"question_id": "ID de pregunta"
-}
-```
-## PUT - editAnswers
-
-```json
-{
-    "answer": "nueva respuesta"
-}
-```
