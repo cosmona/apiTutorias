@@ -28,14 +28,14 @@ const viewUsers = async (req, res, next) => {
         //~ Consulta SQL de una pregunta por id
         result = await connection.query(`
         SELECT * FROM users
-        WHERE id = ?;
-        `,[id]);
+        WHERE id = ? AND Deleted = ?;
+        `,[id,0]);
       } else {
         //~ Consulta SQL de una pregunta por id
         result = await connection.query(`
         SELECT Username, UserRole, Technology FROM users
-        WHERE id = ?;
-        `,[id]);
+        WHERE id = ? AND Deleted = ?;
+        `,[id,0]);
       }
       
       //! no existe el usuario
@@ -45,14 +45,14 @@ const viewUsers = async (req, res, next) => {
     } else {
       //*no se ha pasado Id de usuario y enseña todos los usuarios
       //~ Consulta SQL de una pregunta por id
-      result = await connection.query(`SELECT Username, UserRole, Technology FROM users;`);     
+      result = await connection.query(`SELECT Username, UserRole, Technology FROM users WHERE Deleted = 0;`);     
     }
      
      
      //* Devolvemos resultado
      res.send({
        status: "ok",
-       message: "Usuario mostrado",
+       message: "Usuarios mostrados",
        data: {
          result: result[0]
         },

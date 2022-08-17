@@ -26,21 +26,23 @@ const userEdit = async (req, res, next) => {
             "password":req.body.password
         }
 
-        //! Control de errores - mira que la tecnologia sea permitida
-        if(!TECHNOLOGIES.includes(technology)){
-            await generateErrors("Tecnologia no valida",409);
-        }
+        //* Sacar id de req.body
+        const { username, email, userRole, technology } = req.body;
 
-         //! Control de errores - Si es experto y no especifica la tecnologia
+        //! Control de errores - Si es experto y no especifica la tecnologia
         if (userRole === 'Expert' && !technology){
             await generateErrors('Por favor indique la Technology', 409);
+        }
+
+        //! Control de errores - mira que la tecnologia sea permitida
+        if(userRole === 'Expert' && !TECHNOLOGIES.includes(technology)){
+            await generateErrors("Tecnologia no valida",409);
         }
 
         //* validacion de los datos del body 
          await validate(registrationSchema, valida);
 
-        //* Sacar id de req.body
-        const { username, email, userRole, technology } = req.body;
+     
 
         //! Control de errores - comprobacion del rol
         if (userRole!=="Student" && userRole!=="Expert") {

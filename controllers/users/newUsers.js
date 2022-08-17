@@ -8,7 +8,6 @@ const crypto = require("crypto");
 //^ Importamos funcion que conecta a la BD
 const connectDB = require("../../db/db");
 
-
 //^ Importamos el fichero .env
 require("dotenv").config();
  
@@ -39,6 +38,11 @@ const newUsers = async (req, res, next) => {
       "password":req.body.password
     }
 
+    //! Control de errores - Si es experto y no especifica la tecnologia
+    if (userRole === 'Expert' && !technology){
+      await generateErrors('Por favor indique la Technology', 409);
+    }
+
      //! Control de errores - mira que la tecnologia sea permitida
      if(!TECHNOLOGIES.includes(technology)){
       await generateErrors("Tecnologia no valida",409);
@@ -46,11 +50,6 @@ const newUsers = async (req, res, next) => {
 
     //* validacion de los datos del body
     await validate(registrationSchema, valida);
-
-    //! Control de errores - Si es experto y no especifica la tecnologia
-    if (userRole === 'Expert' && !technology){
-      await generateErrors('Por favor indique la Technology', 409);
-    }
 
     //~ Consulta SQL - Consultar DB para ver si el usuario existe
     const [users] = await connection.query(
