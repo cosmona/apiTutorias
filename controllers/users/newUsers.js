@@ -8,6 +8,10 @@ const crypto = require("crypto");
 //^ Importamos funcion que conecta a la BD
 const connectDB = require("../../db/db");
 
+//^ Importamos el fichero .env
+require("dotenv").config();
+ 
+
 //^ Importamos funcion validate - genera errores y schema que comprueba los datos
 const { validate, generateErrors } = require("../../helpers");
 const { registrationSchema } = require("../../schemas");
@@ -27,20 +31,25 @@ const newUsers = async (req, res, next) => {
     connection = await connectDB();
     
     //* Recuperamos parametros 
-    const { username, email, password, userRole, Technology } = req.body;    
-
+    const { username, email, password, userRole, technology } = req.body;    
+    const {TECHNOLOGIES} = process.env;
     const valida = {
       "email":req.body.email,
       "password":req.body.password
-  }
+    }
+
+    //! Control de errores - Si es experto y no especifica la tecnologia
+    if (userRole === 'Expert' && !technology){
+      await generateErrors('Por favor indique la Technology', 409);
+    }
+
+     //! Control de errores - mira que la tecnologia sea permitida
+     if(!TECHNOLOGIES.includes(technology)){
+      await generateErrors("Tecnologia no valida",409);
+    }
 
     //* validacion de los datos del body
     await validate(registrationSchema, valida);
-
-    //! Si es experto y no especifica la tecnologia
-    if (userRole === 'Expert' && !Technology){
-      await generateErrors('Por favor indique la Technology', 409);
-    }
 
     //~ Consulta SQL - Consultar DB para ver si el usuario existe
     const [users] = await connection.query(
@@ -77,11 +86,23 @@ const newUsers = async (req, res, next) => {
         password,
         userRole,
         RegistrationCode,
-        Technology,
+        technology,
       ]
     );
-    let cuerpo = `Bienvenido a Alejandria, por favor verifique su correo <a href="http://127.0.0.1:3000/users/validate/${RegistrationCode}">aqui!</a>`;
-    let subject = "Correo de verificación Alejandria";
+    let cuerpo = `
+                    <body>
+                      <header style="text-align: center;">
+                        <img src="https://apitutorias.netlify.app/images/logo.png" width="400px" alt="">
+                      </header>
+                      <p style="text-align: center;">
+                        Bienvenido a Alejandria, por favor verifique su correo <a href="http://127.0.0.1:3000/users/validate/${RegistrationCode}">aqui!</a>
+                      </p>
+                      
+                    </body>
+                   
+      `;
+
+      let subject = "Correo de verificación Alejandria";
   
     //* envia correo de validacion
     const msg = {

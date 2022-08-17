@@ -30,7 +30,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"email\": \"{{correo}}\",\n    \"password\": \"123456789\"\n}",
+							"raw": "{\n    \"email\": {{correo}},\n    \"password\": \"123456789\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -200,53 +200,18 @@
 							}
 						],
 						"url": {
-							"raw": "localhost:{{port}}/users/2",
+							"raw": "localhost:{{port}}/users/",
 							"host": [
 								"localhost"
 							],
 							"port": "{{port}}",
 							"path": [
 								"users",
-								"2"
-							],
-							"query": [
-								{
-									"key": "",
-									"value": "",
-									"disabled": true
-								}
+								""
 							]
 						}
 					},
 					"response": [
-						{
-							"name": "viewUsers (Un usuario)",
-							"originalRequest": {
-								"method": "GET",
-								"header": [
-									{
-										"key": "authorization",
-										"value": "{{token}}",
-										"type": "text"
-									}
-								],
-								"url": {
-									"raw": "localhost:{{port}}/users/2",
-									"host": [
-										"localhost"
-									],
-									"port": "{{port}}",
-									"path": [
-										"users",
-										"2"
-									]
-								}
-							},
-							"_postman_previewlanguage": null,
-							"header": null,
-							"cookie": [],
-							"body": null
-						},
 						{
 							"name": "viewUsers (Todos)",
 							"originalRequest": {
@@ -274,6 +239,34 @@
 							"header": null,
 							"cookie": [],
 							"body": null
+						},
+						{
+							"name": "viewUsers (Un usuario)",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "localhost:{{port}}/users/2",
+									"host": [
+										"localhost"
+									],
+									"port": "{{port}}",
+									"path": [
+										"users",
+										"2"
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
 						}
 					]
 				},
@@ -284,7 +277,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"inaki\",\n    \"email\": \"inakipf@gmail.com\",\n    \"password\": \"123456789\",\n    \"userRole\": \"Expert\"\n}",
+							"raw": "{\n    \"username\": \"inaki\",\n    \"email\": \"tucorreo@gmail.com\",\n    \"password\": \"123456789\",\n    \"userRole\": \"Expert\",\n    \"technology\":\"CSS\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -304,7 +297,70 @@
 						},
 						"description": "//* POST - /users/** - Crear el usuario\n\napp.post(\"/users\", newUsers);"
 					},
-					"response": []
+					"response": [
+						{
+							"name": "newUsers Student",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"inaki\",\n    \"email\": \"tucorreo@gmail.com\",\n    \"password\": \"123456789\",\n    \"userRole\": \"Student\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:{{port}}/users/",
+									"host": [
+										"localhost"
+									],
+									"port": "{{port}}",
+									"path": [
+										"users",
+										""
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						},
+						{
+							"name": "newUsers Expert",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"username\": \"inaki\",\n    \"email\": \"tucorreo@gmail.com\",\n    \"password\": \"123456789\",\n    \"userRole\": \"Expert\",\n    \"technology\":\"CSS\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "localhost:{{port}}/users/",
+									"host": [
+										"localhost"
+									],
+									"port": "{{port}}",
+									"path": [
+										"users",
+										""
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": null
+						}
+					]
 				},
 				{
 					"name": "editUser",
@@ -330,7 +386,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"username\": \"Alumno\",\n    \"email\": \"{{correo}}\",\n    \"password\": \"123456789\",\n    \"userRole\": \"Expert\",\n    \"technology\": \"CSS\"\n}",
+							"raw": "{\n    \"username\": \"Alumno\",\n    \"email\": \"tunuevocorreo@gmail.com\",\n    \"password\": \"123456789\",\n    \"userRole\": \"Student\",\n    \"technology\":\"CSS\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -442,6 +498,31 @@
 					"response": []
 				},
 				{
+					"name": "oneQuestion",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "localhost:{{port}}/questions/1",
+							"host": [
+								"localhost"
+							],
+							"port": "{{port}}",
+							"path": [
+								"questions",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "newQuestions",
 					"request": {
 						"method": "POST",
@@ -495,14 +576,14 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:{{port}}/questions/1",
+							"raw": "localhost:{{port}}/questions/2",
 							"host": [
 								"localhost"
 							],
 							"port": "{{port}}",
 							"path": [
 								"questions",
-								"1"
+								"2"
 							]
 						}
 					},
@@ -532,31 +613,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "oneQuestion",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "authorization",
-								"value": "{{token}}",
-								"type": "text"
-							}
-						],
-						"url": {
-							"raw": "localhost:{{port}}/questions/1",
-							"host": [
-								"localhost"
-							],
-							"port": "{{port}}",
-							"path": [
-								"questions",
-								"1"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -565,9 +621,6 @@
 			"item": [
 				{
 					"name": "getAnswers",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [
@@ -577,24 +630,15 @@
 								"type": "text"
 							}
 						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"answer\": \"mario\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
 						"url": {
-							"raw": "localhost:{{port}}/answers/2",
+							"raw": "localhost:{{port}}/answers/1",
 							"host": [
 								"localhost"
 							],
 							"port": "{{port}}",
 							"path": [
 								"answers",
-								"2"
+								"1"
 							],
 							"query": [
 								{

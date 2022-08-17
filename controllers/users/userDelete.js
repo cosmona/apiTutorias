@@ -17,9 +17,8 @@ const userDelete = async (req, res, next) => {
         connection = await connectDB();
       
         //~ Consulta SQL - Modificar la información actual del usuario en la base de datos
-        let consult =`DELETE FROM users `;
+        let consult ="UPDATE users SET `Activation` = '0', `Deleted` = '1' ";
         consult += ` WHERE ID = ${req.userToken.id}`;
-
         const [currentUser] = await connection.query(consult);
         
         //! si no existe el usuario
