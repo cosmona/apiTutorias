@@ -28,6 +28,8 @@ const deleteAnswers = async (req, res, next) => {
       SELECT Question_ID, User_ID FROM answers WHERE ID =?;`,
       [idAnswer]);
       
+      console.log('QuestionData', QuestionData);
+
       //! Control de errores - si no existe la respuesta
       if(QuestionData.length === 0){
         await generateErrors("No existe la respuesta", 409 );

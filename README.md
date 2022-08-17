@@ -126,3 +126,85 @@ usuario admin.
 
 - [ ] ⭕️🔒️💀️ **DELETE - /answers/:id/photos/:photoID** - borra una imagen
       de una respuesta | Token obligatorio y mismo usuario.
+
+## Template para postman
+
+# Users
+
+## POST - loginUsers
+
+```json
+      {
+      "email": "correo@correo.com",
+      "password" :"123456789"
+      }
+```
+
+## POSR - newUsers
+
+```json
+      {
+      "username": "usuario",
+      "email": "correo@correo.com",
+      "password": "contraseña",
+      "userRole": "Expert/Student"
+      }
+
+´´´
+Si eres Expert tienes que agregar el campo Technology y escoger entre"HTML", "CSS", "JavaScript", "SQL", "Node" o "React"
+
+## PUT- editUser 
+
+```json
+      {
+      "username": "Alumno",
+      "email": "correo@correo.com",
+      "password": "contraseña",
+      "userRole": "Expert/Student",
+      "technology": "tech"
+      }
+
+```
+Se puede colocar 1 o mas campos
+
+# Questions
+
+## POST - newQuestions
+
+```json
+{
+"question":"cuerpo de la pregunta",
+"technology":"CSS",
+"title": "titulo de la pregunta "
+}
+
+```
+
+## PUT - editQuestions
+
+```json
+{
+"title": "nueno titulo",
+"question": "nueva pregunta",
+"technology": "nueva tech"
+}
+``` 
+Se puede colocar 1 o mas campos
+
+# Answers
+
+## POST - newAnswer
+
+```json
+{
+"answer": "respuesta",
+"question_id": "ID de pregunta"
+}
+```
+## PUT - editAnswers
+
+```json
+{
+    "answer": "nueva respuesta"
+}
+```
