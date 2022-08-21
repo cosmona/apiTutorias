@@ -40,9 +40,7 @@ const getAnswers = async (req, res, next) => {
       WHERE Answer_ID = ?
       `, [id]
       ) 
-      
-      console.log('answer_votes', answer_votes)
-      
+            
       let total = 0;
       for (const votes of answer_votes) {
         

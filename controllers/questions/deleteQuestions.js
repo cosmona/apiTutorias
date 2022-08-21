@@ -50,10 +50,6 @@ const deleteQuestions = async (req, res, next) => {
         DELETE FROM questions WHERE User_ID = ? AND ID = ?;
       `,[idUser,idQuestion])
 
-      /* //! Si no exite la pregunta
-      if(estate[0].affectedRows === 0){
-        await generateErrors("No existe la pregunta", 409)
-      } */
       
       //* Devolvemos resultados
       res.send({

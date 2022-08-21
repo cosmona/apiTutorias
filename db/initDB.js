@@ -70,7 +70,7 @@ async function main() {
 			);		
 		`);
 
-    console.log("Finalizado anwsers");
+    console.log("Finalizado answers");
 
     await connection.query(`
 			CREATE TABLE answer_votes (

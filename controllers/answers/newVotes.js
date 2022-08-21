@@ -31,15 +31,12 @@ const newVotes = async (req, res, next) => {
       VALUES (?,?,?,?);`,
       [creationDate, vote, answer_id, user_id]
       );
-      console.log('answer', answer)
       
     //* si no existe la respuesta 
     if (answer.length === 0) {
       await generateErrors("No existe la respuesta", 409);
     }
 
-
-    //todo error enum prohibido
 
     //* Devolvemos resultado
     res.send({

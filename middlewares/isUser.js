@@ -29,7 +29,6 @@ const isUser = async (req, res, next) => {
     let tokenInfo;
 
     tokenInfo = jwt.verify(authorization, process.env.JWT_SECRET);
-    console.log('tokenInfo', tokenInfo)
   
     //* añadimos en la request (req) el tokenInfo
     req.userToken = tokenInfo;

@@ -53,7 +53,6 @@ const newAnswers = async (req, res, next) => {
         [creationDate, answer, user_id, question_id]
         );
         answerID = respuesta[0].insertId;
-        console.log('respuesta', respuesta[0].insertId);
     } catch (error) {
         //! Control de errores - Si da error en la foreing key de Question_ID
         await generateErrors("No existe pregunta asociada", 409);

@@ -19,16 +19,10 @@ const deleteAnswers = async (req, res, next) => {
       const idAnswer = req.params.id;
       const idUser = req.userToken.id;
 
-      // //~ Consulta SQL- Guarda el ID de la pregunta
-      // let Question_ID = await connection.query(`
-      //   SELECT Question_ID FROM answers WHERE ID =?;`,
-      // [idAnswer]);
       //~ Consulta SQL- Guarda el ID de la pregunta
       let [QuestionData] = await connection.query(`
       SELECT Question_ID, User_ID FROM answers WHERE ID =?;`,
       [idAnswer]);
-      
-      console.log('QuestionData', QuestionData);
 
       //! Control de errores - si no existe la respuesta
       if(QuestionData.length === 0){
@@ -48,8 +42,6 @@ const deleteAnswers = async (req, res, next) => {
       DELETE FROM answers WHERE User_ID = ? AND ID = ?;`,
       [idUser, idAnswer]);
       
-      console.log('estate', estate);
-
 
       //~ Consulta SQL - Busca si hay mas respuestas a la pregunta asociada de la respuesta borrada
       const [moreAnswers] = await connection.query(
@@ -57,7 +49,7 @@ const deleteAnswers = async (req, res, next) => {
         ,[Question_ID]
       ) 
 
-      //*si no hay mas cambiar campo de la question
+      //*si no hay más cambia el campo de la question
       if( moreAnswers.length <= 0){
         //~ Consulta SQL - cambia el valor answered en la tabla questions a false
         await connection.query(
