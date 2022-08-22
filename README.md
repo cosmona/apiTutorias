@@ -138,9 +138,9 @@ Si eres Expert tienes que agregar el campo Technology y escoger entre "HTML", "C
   
 ```json
 {
-"title": "nueno titulo",
-"question": "nueva pregunta",
-"technology": "nueva tech"
+      "title": "nueno titulo",
+      "question": "nueva pregunta",
+      "technology": "nueva tech"
 }
 ``` 
 

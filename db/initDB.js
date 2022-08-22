@@ -2,7 +2,6 @@
 
 require("dotenv").config();
 const { format } = require("date-fns");
-const { func } = require("joi");
 const connectDB = require("./db");
 
 let connection;
