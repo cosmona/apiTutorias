@@ -23,7 +23,7 @@ const getAnswers = async (req, res, next) => {
       `
       SELECT *
       FROM  answers
-      WHERE Question_ID = ?
+      WHERE id = ?
       `, [id]);
     
     //* Error

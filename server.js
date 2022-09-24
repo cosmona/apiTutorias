@@ -9,7 +9,7 @@ require("dotenv").config();
 //* Controllers
 const { newUsers, validateUsers, loginUsers, userEdit, userDelete, viewUsers } = require("./controllers/users");
 const { newQuestions, getAllQuestions, getQuestions,editQuestions, deleteQuestions } = require("./controllers/questions");
-const { newAnswers, deleteAnswers, editAnswers, newVotes, getAnswers } = require("./controllers/answers");
+const { newAnswers, deleteAnswers, editAnswers, newVotes, getAnswers, getAnswer } = require("./controllers/answers");
 
 //* Middlewares
 const { isUser, isExpert } = require("./middlewares");
@@ -69,6 +69,9 @@ app.post("/answers", isUser, isExpert, newAnswers);
 
 //* GET - muestra una respuesta
 app.get("/answers/:id", getAnswers);
+
+//* GET - muestra todas las respuestas de una pregunta
+app.get("/answer/:id", getAnswer);
 
 //* DELETE - /answers/:id** - borra una respuesta | Token obligatorio y mismo usuario.
 app.delete("/answers/:id", isUser, deleteAnswers);
