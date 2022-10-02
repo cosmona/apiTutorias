@@ -24,41 +24,47 @@ const viewUsers = async (req, res, next) => {
       myId = req.userToken.id;
 
       //* si es el propio usuario enseña mas o menos datos
-      if (id == myId){
+      if (id == myId) {
         //~ Consulta SQL de una pregunta por id
-        result = await connection.query(`
+        result = await connection.query(
+          `
         SELECT * FROM users
         WHERE id = ? AND Deleted = ?;
-        `,[id,0]);
+        `,
+          [id, 0]
+        );
       } else {
         //~ Consulta SQL de una pregunta por id
-        result = await connection.query(`
-        SELECT Username, UserRole, Technology FROM users
+        result = await connection.query(
+          `
+        SELECT ID, Username, UserRole, Technology FROM users
         WHERE id = ? AND Deleted = ?;
-        `,[id,0]);
+        `,
+          [id, 0]
+        );
       }
-      
+
       //! no existe el usuario
       if (result[0].length === 0) {
-        await generateErrors ("Usuario no encontrado", 409)
+        await generateErrors("Usuario no encontrado", 409);
       }
     } else {
       //*no se ha pasado Id de usuario y enseña todos los usuarios
       //~ Consulta SQL de una pregunta por id
-      result = await connection.query(`SELECT Username, UserRole, Technology FROM users WHERE Deleted = 0;`);     
+      result = await connection.query(
+        `SELECT ID, Username, UserRole, Technology FROM users WHERE Deleted = 0;`
+      );
     }
-     
-     
-     //* Devolvemos resultado
-     res.send({
-       status: "ok",
-       message: "Usuarios mostrados",
-       data: {
-         result: result[0]
-        },
-      });
-      
-    } catch (error) {
+
+    //* Devolvemos resultado
+    res.send({
+      status: "ok",
+      message: "Usuarios mostrados",
+      data: {
+        result: result[0],
+      },
+    });
+  } catch (error) {
     next(error);
   } finally {
     //* Acaba la conexion

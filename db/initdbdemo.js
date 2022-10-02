@@ -1,7 +1,6 @@
 "use strict";
 //!!!FRONT
 
-
 require("dotenv").config();
 const { format } = require("date-fns");
 const connectDB = require("./db");
@@ -291,7 +290,7 @@ async function main() {
     await connection.query(
       `
       INSERT INTO answers (
-        AnsweredDate,
+        AnswerDate,
         Answer,
         User_ID,
         Question_ID
@@ -299,10 +298,12 @@ async function main() {
   `,
       [creationDate, "Respuesta 1 jeje", "2", "1"]
     );
+
+    console.log("respuesta 1");
     await connection.query(
       `
       INSERT INTO answers (
-        AnsweredDate,
+        AnswerDate,
         Answer,
         User_ID,
         Question_ID
