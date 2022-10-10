@@ -10,7 +10,6 @@ const connectDB = require("../../db/db");
 
 //^ Importamos el fichero .env
 require("dotenv").config();
- 
 
 //^ Importamos funcion validate - genera errores y schema que comprueba los datos
 const { validate, generateErrors } = require("../../helpers");
@@ -22,30 +21,34 @@ verEmail.setApiKey(process.env.SENDGRID_API_KEY);
 //& Crea usuario
 const newUsers = async (req, res, next) => {
   let connection;
-  
+
   //* formatea la fecha para la BD
   const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
-  
+
   try {
     //* Conexion al DB
     connection = await connectDB();
-    
-    //* Recuperamos parametros 
-    const { username, email, password, userRole, technology } = req.body;    
-    const {TECHNOLOGIES} = process.env;
+
+    //* Recuperamos parametros
+    let { username, email, password, userRole, technology } = req.body;
+    const { TECHNOLOGIES } = process.env;
     const valida = {
-      "email":req.body.email,
-      "password":req.body.password
+      email: req.body.email,
+      password: req.body.password,
+    };
+
+    if (userRole === "Student") {
+      technology = "0";
     }
 
     //! Control de errores - Si es experto y no especifica la tecnologia
-    if (userRole === 'Expert' && !technology){
-      await generateErrors('Por favor indique la Technology', 409);
+    if (userRole === "Expert" && !technology) {
+      await generateErrors("Por favor indique la Technology", 409);
     }
 
-     //! Control de errores - mira que la tecnologia sea permitida
-     if(!TECHNOLOGIES.includes(technology)){
-      await generateErrors("Tecnologia no valida",409);
+    //! Control de errores - mira que la tecnologia sea permitida
+    if (!TECHNOLOGIES.includes(technology)) {
+      await generateErrors("Tecnologia no valida", 409);
     }
 
     //* validacion de los datos del body
@@ -58,15 +61,14 @@ const newUsers = async (req, res, next) => {
       `,
       [email]
     );
-    
+
     //! si existe, da error
     if (users.length !== 0) {
-      await generateErrors('Este email ya esta en uso', 409);
+      await generateErrors("Este email ya esta en uso", 409);
     }
-  
+
     //* si no existe, crea el usuario en la DB inactivo y el codigo unico
     const RegistrationCode = crypto.randomBytes(25).toString("hex");
-
     await connection.query(
       `
           INSERT INTO users (
@@ -102,8 +104,8 @@ const newUsers = async (req, res, next) => {
                    
       `;
 
-      let subject = "Correo de verificación Alejandria";
-  
+    let subject = "Correo de verificación Alejandria";
+
     //* envia correo de validacion
     const msg = {
       to: email,
@@ -120,7 +122,7 @@ const newUsers = async (req, res, next) => {
       await verEmail.send(msg);
     } catch (error) {
       //! Error generico en sendgrid
-     await generateErrors("Error al enviar el correo", 409)
+      await generateErrors("Error al enviar el correo", 409);
     }
 
     //* Devolvemos resultado
@@ -128,13 +130,12 @@ const newUsers = async (req, res, next) => {
       Status: "ok",
       Message: "Usuario creado! por favor verifique su cuenta ",
     });
-
   } catch (error) {
     next(error);
   } finally {
-      //* Acaba la conexion
-      if (connection) {
-        connection.release();
+    //* Acaba la conexion
+    if (connection) {
+      connection.release();
     }
   }
 };

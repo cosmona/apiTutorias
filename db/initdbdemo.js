@@ -32,7 +32,7 @@ async function main() {
 			UserRole ENUM("Student", "Expert") DEFAULT "Student" NOT NULL,
 			Activation BOOLEAN DEFAULT false,
 			RegistrationCode VARCHAR(50),
-			Technology ENUM("HTML", "CSS", "JavaScript", "SQL", "Node", "React") DEFAULT null,
+			Technology ENUM("HTML", "CSS", "JavaScript", "SQL", "Node", "React"),
 			Deleted BOOLEAN DEFAULT false,
 			LastAuthUpdate DATETIME,
 			RecoverCode VARCHAR(100)
