@@ -49,8 +49,7 @@ async function main() {
 			Title TEXT NOT NULL,
 			Question TEXT NOT NULL,
 			User_ID INTEGER NOT NULL,
-			Technology ENUM("HTML", "CSS", "JavaScript", "SQL", "Node", "React") DEFAULT null,
-			Answered BOOLEAN default false,
+			Technology ENUM("HTML", "CSS", "JavaScript", "SQL", "Node", "React") NOT NULL,
 			FOREIGN KEY (User_id) REFERENCES users(ID)
 			);
 			`);
