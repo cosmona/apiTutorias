@@ -29,6 +29,7 @@ const {
   newVotes,
   getAnswers,
   getAnswer,
+  getMyAnswers,
   getVotes,
 } = require("./controllers/answers");
 
@@ -92,6 +93,9 @@ app.get("/answers/:id", getAnswers);
 //* GET - /answer/:id** muestra todas las respuestas de una pregunta
 app.get("/answer/:id", getAnswer);
 
+//* GET - /myanswers/:id** muestra las respuestas del usuario logueado
+app.get("/myanswers/:id", isUser, getMyAnswers);
+
 //* DELETE - /answers/:id** - borra una respuesta | Token obligatorio y mismo usuario.
 app.delete("/answers/:id", isUser, deleteAnswers);
 
@@ -103,7 +107,7 @@ app.put("/answers/:id", isUser, editAnswers);
 
 app.post("/answers/:id/votes", isUser, newVotes);
 
-//* GET - /votes/:id** - muestra la media de una respuesta
+//* GET - /votes/:id** - muestra la media de una respuesta | id de la respuesta
 app.get("/votes/:id", getVotes);
 
 //& Error genérico

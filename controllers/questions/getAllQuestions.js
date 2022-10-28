@@ -28,22 +28,25 @@ const getAllQuestions = async (req, res, next) => {
         consult += `title LIKE "%${title}%"`;
       }
       if (User_ID) {
+        if (title) {
+          consult += ` AND `;
+        }
         consult += ` User_ID = "${User_ID} "`;
       }
       if (technology) {
-        if (title) {
+        if (title || User_ID) {
           consult += ` AND `;
         }
         consult += `technology LIKE "%${technology}%"`;
       }
       if (questionDate) {
-        if (title || technology) {
+        if (title || User_ID || technology) {
           consult += ` AND `;
         }
         consult += `questionDate="${questionDate}"`;
       }
       if (answered) {
-        if (title || technology || questionDate) {
+        if (title || User_ID || technology || questionDate) {
           consult += ` AND `;
         }
         consult += `answered="${answered}"`;
