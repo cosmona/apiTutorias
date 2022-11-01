@@ -1,17 +1,19 @@
-'use strict';
+"use strict";
 
 //^npm import
-const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 
 //^ Importamos funcion que conecta a la BD
-const connectDB = require('../db/db');
+const connectDB = require("../db/db");
 
 //^ Importa funcion que genera errores
-const {generateErrors} = require('../helpers');
+const { generateErrors } = require("../helpers");
 
 //& Comprueba token
 const isUser = async (req, res, next) => {
   let connection;
+
+  console.log("llegoo is user");
 
   try {
     //* Conecta a la DB
@@ -29,19 +31,18 @@ const isUser = async (req, res, next) => {
     let tokenInfo;
 
     tokenInfo = jwt.verify(authorization, process.env.JWT_SECRET);
-  
+
     //* añadimos en la request (req) el tokenInfo
     req.userToken = tokenInfo;
-
+    console.log("termino isuser");
     next();
-    } catch (error) {
+  } catch (error) {
+    console.log(error);
     next(error);
-    } finally {
+  } finally {
     //* finaliza la conexion
     if (connection) connection.release();
   }
 };
-
-
 
 module.exports = isUser;

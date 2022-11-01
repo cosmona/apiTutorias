@@ -45,6 +45,8 @@ const newUsers = async (req, res, next) => {
     if (userRole === "Expert" && !technology) {
       await generateErrors("Por favor indique la Technology", 409);
     }
+    console.log(TECHNOLOGIES);
+    console.log(technology);
 
     //! Control de errores - mira que la tecnologia sea permitida
     if (!TECHNOLOGIES.includes(technology)) {

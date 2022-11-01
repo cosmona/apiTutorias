@@ -15,10 +15,15 @@ const getAllQuestions = async (req, res, next) => {
     connection = await connectDB();
 
     //* Recoger parametros
-    const { title, technology, questionDate, answered, User_ID } = req.query;
+    const { search, title, technology, questionDate, answered, User_ID } =
+      req.query;
+
+    console.log(req.query);
+
+    //TODO use search generic
 
     //~ Consulta SQL
-    let consult = `SELECT * FROM questions`;
+    let consult = `SELECT ID, QuestionDate, Title, Question, User_ID, Technology, CASE WHEN Answered = 1 THEN 'true' ELSE 'false' END AS Answered FROM questions`;
 
     //~ monta el sql
     if (title || technology || questionDate || answered || User_ID) {
@@ -56,6 +61,8 @@ const getAllQuestions = async (req, res, next) => {
     //~ ejecuta SQL
     const [listQuestions] = await connection.query(consult);
 
+    console.log(listQuestions);
+
     //* error
     if (listQuestions.length === 0) {
       await generateErrors("No hay preguntas por mostrar", 409);
@@ -68,6 +75,7 @@ const getAllQuestions = async (req, res, next) => {
       data: listQuestions,
     });
   } catch (error) {
+    console.log(error);
     next(error);
   } finally {
     //* Acaba la conexion
