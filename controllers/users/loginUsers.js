@@ -23,36 +23,37 @@ const loginUsers = async (req, res, next) => {
 
     //* Recojemos parametros de req.body el email y la password
     const { email, password } = req.body;
-    
+
     //~ Consulta SQL - selecionamos el usuario con este email y password
     const [user] = await connection.query(
       `
-      SELECT ID, UserRole, Activation
+      SELECT ID, Username, UserRole, Activation
       FROM users
       WHERE Email=? AND Password=SHA2(?, 512)
       `,
       [email, password]
-      );
-      
+    );
+
     //! Control de errores - si no encuentro el usuario salgo con error
     if (user.length === 0) {
-     await generateErrors("Email o password incorrecto", 401)
+      await generateErrors("Email o password incorrecto", 401);
     }
-    
+
     //! Control de errores - comprobar que el usuario este activo
     if (!user[0].Activation) {
-     await generateErrors("El usuario no está activado", 401)
+      await generateErrors("El usuario no está activado", 401);
     }
 
     //* crear objeto con los datos que quiere guardar en el token
     const info = {
       id: user[0].ID,
+      username: user[0].Username,
       role: user[0].UserRole,
       technology: user[0].technology,
     };
 
     //* generar token
-    const token = jwt.sign(info, process.env.JWT_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign(info, process.env.JWT_SECRET, { expiresIn: "365d" });
 
     //* Devolvemos resultado
     res.send({
@@ -61,7 +62,7 @@ const loginUsers = async (req, res, next) => {
       data: {
         token,
         email,
-        info
+        info,
       },
     });
   } catch (error) {

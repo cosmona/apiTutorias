@@ -49,8 +49,9 @@ async function main() {
 			Title TEXT NOT NULL,
 			Question TEXT NOT NULL,
 			User_ID INTEGER NOT NULL,
+      Answered BOOLEAN default false,
 			Technology ENUM("HTML", "CSS", "JavaScript", "SQL", "Node", "React") NOT NULL,
-			FOREIGN KEY (User_id) REFERENCES users(ID)
+			CONSTRAINT FK_User_id FOREIGN KEY (User_id) REFERENCES users(ID) ON DELETE CASCADE
 			);
 			`);
 
@@ -64,8 +65,8 @@ async function main() {
 				Answer TEXT NOT NULL,
 				User_ID INTEGER NOT NULL,
 				Question_ID INTEGER NOT NULL,
-				FOREIGN KEY (User_id) REFERENCES users(ID),
-				FOREIGN KEY (Question_ID) REFERENCES questions(ID)
+				CONSTRAINT FK_A_User_id FOREIGN KEY (User_id) REFERENCES users(ID)  ON DELETE CASCADE,
+				CONSTRAINT FK_A_Question_ID FOREIGN KEY (Question_ID) REFERENCES questions(ID)  ON DELETE CASCADE
 			);		
 		`);
 
@@ -80,7 +81,7 @@ async function main() {
 				FOREIGN KEY (Answer_ID) REFERENCES answers(ID),
 				CHECK (Vote IN (1,2,3,4,5)),
 				User_ID INT NOT NULL,
-				FOREIGN KEY (User_ID) REFERENCES users(ID),
+				CONSTRAINT FK_AV_User_id FOREIGN KEY (User_ID) REFERENCES users(ID)  ON DELETE CASCADE,
 				UNIQUE(Answer_id,User_id)
 			);		
 		`);
@@ -225,9 +226,9 @@ async function main() {
       Title,
       Question,
       User_ID,
-      Technology,
-      Answered
-    ) VALUES (?,?,?,?,?,?);
+      Technology
+      
+    ) VALUES (?,?,?,?,?);
 `,
       [
         creationDate,
@@ -235,9 +236,9 @@ async function main() {
         "Pregunta ejemplo 2 desde alumno #2",
         "4",
         "CSS",
-        "1",
       ]
     );
+    console.log("Pregunta 1-Alumno 1 ");
 
     //*** */
     await connection.query(
@@ -247,9 +248,9 @@ async function main() {
       Title,
       Question,
       User_ID,
-      Technology,
-      Answered
-    ) VALUES (?,?,?,?,?,?);
+      Technology
+      
+    ) VALUES (?,?,?,?,?);
 `,
       [
         creationDate,
@@ -257,7 +258,6 @@ async function main() {
         "Pregunta ejemplo 3 desde alumno #1",
         "3",
         "HTML",
-        "1",
       ]
     );
     //*** */
@@ -268,9 +268,9 @@ async function main() {
       Title,
       Question,
       User_ID,
-      Technology,
-      Answered
-    ) VALUES (?,?,?,?,?,?);
+      Technology
+      
+    ) VALUES (?,?,?,?,?);
 `,
       [
         creationDate,
@@ -278,7 +278,6 @@ async function main() {
         "Pregunta ejemplo 4 desde alumno #2",
         "4",
         "HTML",
-        "1",
       ]
     );
 
