@@ -112,10 +112,12 @@ app.get("/votes/:id", getVotes);
 
 //& Error genérico
 app.use((error, req, res, next) => {
-  res.status(error.httpStatus || 500).send({
-    status: "Error",
-    message: error.message,
-  });
+  res.statusText = error.message;
+  res.status(error.httpStatus || 500).send(error.message);
+  // .json({
+  //   status: "Error",
+  //   message: error.message,
+  // });
 });
 
 //& Puerto en escucha
