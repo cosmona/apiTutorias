@@ -8,6 +8,7 @@ const { generateErrors } = require("../../helpers");
 
 //& Muestra todas las preguntas
 const getAllQuestions = async (req, res, next) => {
+  console.log("hola cosa");
   let connection;
 
   try {
@@ -60,8 +61,6 @@ const getAllQuestions = async (req, res, next) => {
 
     //~ ejecuta SQL
     const [listQuestions] = await connection.query(consult);
-
-    console.log(listQuestions);
 
     //* error
     if (listQuestions.length === 0) {
