@@ -11,7 +11,6 @@ const { generateErrors } = require("../../helpers");
 //& POST - /answers - crea una respuesta
 const newAnswers = async (req, res, next) => {
   let connection;
-  console.log("llego");
   try {
     //* formatea la fecha para la bd
     const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
@@ -21,8 +20,6 @@ const newAnswers = async (req, res, next) => {
 
     //* Recuperar parametros desde el body y desde el token
     const { answer, question_id } = req.body;
-
-    console.log("answer" + answer);
     const user_id = req.userToken.id;
     let answerID;
 
@@ -44,23 +41,13 @@ const newAnswers = async (req, res, next) => {
 
     //~ Consulta SQL - Comprueba que esta persona no haya respondido ya
     const answerExist = await connection.query(
-      `SELECT COUNT(*) FROM answers WHERE User_id = ? AND question_id=?;`,
+      `SELECT * FROM answers WHERE User_id = ? AND question_id=?;`,
       [user_id, question_id]
     );
 
-    console.log(answerExist);
-    console.log(answerExist[0].length !== 0);
-
     //! Control de errores - si ya ha respondido a la pregunta
     if (answerExist[0].length !== 0) {
-      //await generateErrors("Ya has respondido esta pregunta", 409);
-      console.log("llego aquí con un error" + message);
-      const error = new Error("Ya has respondido esta pregunta");
-      error.httpStatus = 409;
-      res.status(409).send({
-        status: "error",
-        message: "Ya has respondido esta pregunta",
-      });
+      await generateErrors("Ya has respondido esta pregunta", 409);
     }
 
     //~ Consulta SQL - Inserta la respuesta en la BD
@@ -72,7 +59,6 @@ const newAnswers = async (req, res, next) => {
       );
       answerID = respuesta[0].insertId;
     } catch (error) {
-      console.log(error);
       //! Control de errores - Si da error en la foreing key de Question_ID
       await generateErrors("No existe pregunta asociada", 409);
     }
@@ -91,7 +77,6 @@ const newAnswers = async (req, res, next) => {
       },
     });
   } catch (error) {
-    console.log(error);
     next(error);
   } finally {
     //* Finaliza la conexion
