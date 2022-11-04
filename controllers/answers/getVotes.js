@@ -23,6 +23,7 @@ const getVotes = async (req, res, next) => {
       `
       SELECT *
       FROM  answer_votes
+      JOIN answer
       WHERE Answer_ID = ?
       `,
       [id]

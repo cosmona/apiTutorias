@@ -7,7 +7,7 @@ const { format } = require("date-fns");
 const connectDB = require("../../db/db");
 
 //^ Importa funcion de errores
-const { generateErrors } = require('../../helpers');
+const { generateErrors } = require("../../helpers");
 
 //& Crea votos
 const newVotes = async (req, res, next) => {
@@ -16,10 +16,10 @@ const newVotes = async (req, res, next) => {
   try {
     //* formatea la fecha para la bd
     const creationDate = format(new Date(), "yyyy-MM-dd HH:mm:ss");
-    
+
     //* Conexion al DB
     connection = await connectDB();
-    
+
     //* //* Recuperar parametros desde el body y desde el token
     const { vote } = req.body;
     const user_id = req.userToken.id;
@@ -30,13 +30,12 @@ const newVotes = async (req, res, next) => {
       `INSERT INTO answer_votes (Date, Vote, Answer_id, User_id)
       VALUES (?,?,?,?);`,
       [creationDate, vote, answer_id, user_id]
-      );
-      
-    //* si no existe la respuesta 
+    );
+
+    //* si no existe la respuesta
     if (answer.length === 0) {
       await generateErrors("No existe la respuesta", 409);
     }
-
 
     //* Devolvemos resultado
     res.send({
@@ -44,6 +43,7 @@ const newVotes = async (req, res, next) => {
       message: "Voto creado",
     });
   } catch (error) {
+    console.log(error);
     next(error);
   } finally {
     //* Acaba la conexion
