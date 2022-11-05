@@ -21,6 +21,8 @@ const isUser = async (req, res, next) => {
 
     //* recoje parametros
     const { authorization } = req.headers;
+    console.log("req.headers", req.headers);
+    console.log(authorization);
 
     //! si no tengo Authorization salgo con un error
     if (!authorization) {

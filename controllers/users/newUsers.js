@@ -30,7 +30,7 @@ const newUsers = async (req, res, next) => {
     connection = await connectDB();
 
     //* Recuperamos parametros
-    let { username, email, password, userRole, technology } = req.body;
+    let { username, email, password, userRole, technology = null } = req.body;
     const { TECHNOLOGIES } = process.env;
     const valida = {
       email: req.body.email,
@@ -38,19 +38,17 @@ const newUsers = async (req, res, next) => {
     };
 
     if (userRole === "Student") {
-      technology = "0";
+      technology = null;
     }
 
     //! Control de errores - Si es experto y no especifica la tecnologia
     if (userRole === "Expert" && !technology) {
       await generateErrors("Por favor indique la Technology", 409);
-    }
-    console.log(TECHNOLOGIES);
-    console.log(technology);
 
-    //! Control de errores - mira que la tecnologia sea permitida
-    if (!TECHNOLOGIES.includes(technology)) {
-      await generateErrors("Tecnologia no valida", 409);
+      //! Control de errores - mira que la tecnologia sea permitida
+      if (!TECHNOLOGIES.includes(technology)) {
+        await generateErrors("Tecnologia no valida", 409);
+      }
     }
 
     //* validacion de los datos del body
@@ -133,6 +131,7 @@ const newUsers = async (req, res, next) => {
       Message: "Usuario creado! por favor verifique su cuenta ",
     });
   } catch (error) {
+    console.log(error);
     next(error);
   } finally {
     //* Acaba la conexion
