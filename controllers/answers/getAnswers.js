@@ -22,69 +22,42 @@ const getAnswers = async (req, res, next) => {
       `
       SELECT *
       FROM  answers
-      WHERE Question_ID = ?
+      WHERE ID = ?
       `,
       [id]
     );
+
+    console.log(answer[0]);
 
     //* Error
     if (!answer[0]) {
       await generateErrors("No se han encontrado respuestas", 401);
     }
 
-    console.log("andwer ID", answer[0].ID);
+    //* seleccionar los votos
+    const [answer_votes] = await connection.query(
+      `
+      SELECT * 
+      FROM answer_votes
+      WHERE Answer_ID = ?
+      `,
+      [id]
+    );
 
-    let ansID = [];
-    //* extrae el id de las respuestas mostradas
-    let votes = answer.map((answ) => {
-      ansID.push(answ.ID);
-    });
-
-    console.log("ansID", ansID);
-    //* con el id de las respuestas, extrae los votos y los guarda en un array
-    let allVotes = [];
-    for (let i = 0; i < ansID.length; i++) {
-      //* extrae votos de la respuesta i
-      const [currentvote] = await connection.query(
-        `
-            SELECT *
-            FROM  answer_votes
-            WHERE Answer_ID = ?
-            `,
-        [ansID[i]]
-      );
-      //* inicializa valores
-      let media = 0;
-      let j = 0;
-      //*extrae los votos que sean answer_id i
-      for (j; j < currentvote.length; j++) {
-        media += currentvote[j].Vote;
-      }
-      //* saca la media de
-      media = media / j;
-
-      const mediaObj = {
-        answer_id: ansID[i],
-        media: media,
-      };
-
-      console.log("ID: media", ansID[i], media);
-
-      //* agrega a la edia a los datos obtenidos en currentvotes
-      // allVotes.push(ansID[i]);
-      // allVotes.push(currentvote);
-      //*
-      currentvote.push(mediaObj);
-      allVotes.push(mediaObj);
+    let total = 0;
+    for (const votes of answer_votes) {
+      total += Number(votes.Vote);
     }
-    console.log("allVotes", allVotes);
+
+    const media = total / answer_votes.length;
 
     //* Devolvemos resultado
     res.send({
       status: "ok",
       message: "Respuestas mostradas",
-      data: answer,
-      votes: allVotes,
+      data: answer[0],
+      votes: answer_votes,
+      Media: media,
     });
   } catch (error) {
     console.log(error);
