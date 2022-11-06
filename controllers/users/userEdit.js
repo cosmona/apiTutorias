@@ -29,12 +29,17 @@ const userEdit = async (req, res, next) => {
     const validaEmail = {
       email: req.body.email,
     };
-    const { oldPassword, newPassword, repeatNewPassword } = req.body;
+    const validaPassword = {
+      password: req.body.password,
+    };
+
+    const { oldPassword, newPassword, repeatNewPassword, password } = req.body;
 
     //* Sacar id de req.body
-    const { username, email, userRole, technology, password } = req.body;
+    const { username, email, userRole, technology } = req.body;
 
     //* Validate password
+    await validate(passwordSchema, validaPassword);
 
     if (oldPassword) {
       let query = "SELECT COUNT(*) FROM users ";
@@ -43,7 +48,7 @@ const userEdit = async (req, res, next) => {
       const [passwordOK] = await connection.query(query, [oldPassword]);
 
       if (passwordOK === 0) {
-        await generateErrors("La contraseña antigua no es correcta", 409);
+        await generateErrors("Wrong password", 409);
       }
 
       if (
@@ -52,7 +57,7 @@ const userEdit = async (req, res, next) => {
         newPassword !== repeatNewPassword
       ) {
         await generateErrors(
-          "Las contraseñas nuevas no coinciden o no están rellenas",
+          "Passwords do not match or need to be filled",
           409
         );
       }
@@ -60,12 +65,12 @@ const userEdit = async (req, res, next) => {
 
     //! Control de errores - Si es experto y no especifica la tecnologia
     if (userRole === "Expert" && !technology) {
-      await generateErrors("Por favor indique la Technology", 409);
+      await generateErrors("Please indicate technology", 409);
     }
 
     //! Control de errores - mira que la tecnologia sea permitida
     if (userRole === "Expert" && !TECHNOLOGIES.includes(technology)) {
-      await generateErrors("Tecnologia no valida", 409);
+      await generateErrors("Invalid Technology", 409);
     }
 
     //* validacion de los datos del body
@@ -73,7 +78,7 @@ const userEdit = async (req, res, next) => {
 
     //! Control de errores - comprobacion del rol
     if (userRole !== "Student" && userRole !== "Expert") {
-      await generateErrors("Rol no valido", 409);
+      await generateErrors("Invalid role", 409);
     }
 
     //~ Consulta SQL - Modificar la información actual del usuario en la base de datos
@@ -99,7 +104,7 @@ const userEdit = async (req, res, next) => {
       } else {
         //! Control de errores - si es experto hay que indicar de que tecnologia
         await generateErrors(
-          "Debes indicar una tecnologia valida HTML-CSS-JavaScript-SQL-Node-React",
+          "Please indicate a valid technology HTML-CSS-JavaScript-SQL-Node-React",
           409
         );
       }
@@ -114,13 +119,13 @@ const userEdit = async (req, res, next) => {
 
     //! si no existe el usuario
     if (currentUser.affectedRows === 0) {
-      await generateErrors("Error al modificar el usuario", 409);
+      await generateErrors("Error when trying to edit user", 409);
     }
 
     //* Devuelve resultado
     res.send({
       status: "ok",
-      message: "Usuario modificado",
+      message: "User modified",
     });
   } catch (error) {
     console.log(error);
