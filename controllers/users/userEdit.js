@@ -29,12 +29,34 @@ const userEdit = async (req, res, next) => {
     const validaEmail = {
       email: req.body.email,
     };
-    const validaPass = {
-      password: req.body.password,
-    };
+    const { oldPassword, newPassword, repeatNewPassword } = req.body;
 
     //* Sacar id de req.body
     const { username, email, userRole, technology, password } = req.body;
+
+    //* Validate password
+
+    if (oldPassword) {
+      let query = "SELECT COUNT(*) FROM users ";
+      query += ` WHERE ID = ${req.userToken.id}`;
+      query += ` AND SHA2(?, 512) = password`;
+      const [passwordOK] = await connection.query(query, [oldPassword]);
+
+      if (passwordOK === 0) {
+        await generateErrors("La contraseña antigua no es correcta", 409);
+      }
+
+      if (
+        newPassword &&
+        repeatNewPassword &&
+        newPassword !== repeatNewPassword
+      ) {
+        await generateErrors(
+          "Las contraseñas nuevas no coinciden o no están rellenas",
+          409
+        );
+      }
+    }
 
     //! Control de errores - Si es experto y no especifica la tecnologia
     if (userRole === "Expert" && !technology) {
@@ -60,10 +82,10 @@ const userEdit = async (req, res, next) => {
       await validate(usernameSchema, validaEmail);
       consult += `Email="${email}"`;
     }
-    if (password) {
+    if (newPassword) {
       console.log("entro a if password");
-      await validate(passwordSchema, validaPass);
-      consult += `,password="${password}"`;
+      //await validate(passwordSchema, validaPass);
+      consult += `,password = SHA2(${newPassword}, 512)`;
     }
     if (username) {
       consult += `,username="${username}"`;
@@ -101,6 +123,7 @@ const userEdit = async (req, res, next) => {
       message: "Usuario modificado",
     });
   } catch (error) {
+    console.log(error);
     next(error);
   } finally {
     //* Finaliza la conexion

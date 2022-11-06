@@ -87,6 +87,7 @@ const getAnswers = async (req, res, next) => {
       votes: allVotes,
     });
   } catch (error) {
+    console.log(error);
     next(error);
   } finally {
     //* Acaba la conexion

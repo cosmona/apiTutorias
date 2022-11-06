@@ -37,7 +37,7 @@ const getAnswers = async (req, res, next) => {
       `
       SELECT *
       FROM answer_votes AS av 
-      JOIN answers AS a
+      JOIN answers AS a 
       WHERE a.Question_ID = ?
       `,
       [id]
@@ -61,6 +61,7 @@ const getAnswers = async (req, res, next) => {
       Media: media,
     });
   } catch (error) {
+    console.log(error);
     next(error);
   } finally {
     //* Acaba la conexion
