@@ -62,11 +62,20 @@ const getAnswers = async (req, res, next) => {
       }
       //* saca la media de
       media = media / j;
-      const mediaObj = `media:${media}`;
+
+      const mediaObj = {
+        answer_id: ansID[i],
+        media: media,
+      };
+
       console.log("ID: media", ansID[i], media);
+
       //* agrega a la edia a los datos obtenidos en currentvotes
-      currentvote.push(media);
-      allVotes.push(currentvote);
+      // allVotes.push(ansID[i]);
+      // allVotes.push(currentvote);
+      //*
+      currentvote.push(mediaObj);
+      allVotes.push(mediaObj);
     }
     console.log("allVotes", allVotes);
 
