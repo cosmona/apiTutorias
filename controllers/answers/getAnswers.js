@@ -22,7 +22,7 @@ const getAnswers = async (req, res, next) => {
       `
       SELECT *
       FROM  answers
-      WHERE Question_ID = ?
+      WHERE ID = ?
       `,
       [id]
     );
@@ -83,7 +83,7 @@ const getAnswers = async (req, res, next) => {
     res.send({
       status: "ok",
       message: "Respuestas mostradas",
-      data: answer,
+      data: answer[0],
       votes: allVotes,
     });
   } catch (error) {
