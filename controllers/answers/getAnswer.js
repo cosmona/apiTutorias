@@ -9,6 +9,7 @@ const { generateErrors } = require("../../helpers");
 //& muestra preguntas
 const getAnswers = async (req, res, next) => {
   let connection;
+  console.log("entro aqui");
 
   try {
     //* Conexion al DB
@@ -22,7 +23,7 @@ const getAnswers = async (req, res, next) => {
       `
       SELECT *
       FROM  answers
-      WHERE id = ?
+      WHERE Question_ID = ?
       `,
       [id]
     );
